@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Request Details</title>
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color:#f5fcfc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #f0fafa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        .details {
+            margin-top: 20px;
+        }
+        .details p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        .back-button {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Service Request Details</h1>
+
+        <div class="details">
+            <h2>Customer Details</h2>
+            <p><strong>Name:</strong> {{ customer.name }}</p>
+            <p><strong>Email:</strong> {{ customer.email }}</p>
+            <p><strong>Address:</strong> {{ customer.address }}</p>
+
+        </div>
+
+        <div class="details">
+            <h2>Service Request Details</h2>
+            <p><strong>Request ID:</strong> {{ service_request.id }}</p>
+            <p><strong>Service Name:</strong> {{ service_request.service.name }}</p>
+            <p><strong>Status:</strong> {{ service_request.status }}</p>
+            <p><strong>Date Requested:</strong> {{ service_request.date_of_request.strftime('%Y-%m-%d') }}</p>
+        </div>
+
+        <a href="{{ url_for('professional_dashboard') }}" class="back-button">Back</a>
+    </div>
+</body>
+</html>

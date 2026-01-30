@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Summary</title>
+
+    <!-- Link to Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color:#4CAF50;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header .welcome {
+            margin-left: 15px;
+            font-size: 18px;
+        }
+
+        .header nav {
+            margin-right: 15px;
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header nav ul li {
+            display: inline;
+        }
+
+        .header nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        .header nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        h1 {
+            color:#4CAF50;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div>Summary</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('customer_dashboard') }}">Home</a></li>
+                <li><a href="{{ url_for('customer_profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('create_service_request') }}">Create an service Request</a></li>
+                <li><a href="{{ url_for('booking_history') }}">Booking History</a></li>
+                <li><a href="{{ url_for('view_cart') }}">Cart</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Summary</h2>
+        
+        <!-- Bar Chart -->
+        <canvas id="requestChart" width="200" height="50"></canvas>
+    </div>
+
+    <script>
+        // Get the data from the backend or set them dynamically from Python (flask)
+        var ctx = document.getElementById('requestChart').getContext('2d');
+        var requestChart = new Chart(ctx, {
+            type: 'bar',  // Bar chart type
+            data: {
+                labels: ['Total Requests', 'Completed Requests', 'Pending Requests', 'Rejected Requests'], // X-axis labels
+                datasets: [{
+                    label: 'Request Counts',
+                    data: ['{{ total_requests }}', '{{ completed_requests }}', '{{ pending_requests }}', '{{ rejected_requests }}'], // Data from Flask
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',   // Total Requests (Blue)
+                        'rgba(34, 139, 34, 0.3)',    // Completed (Darker Green)
+                        'rgba(255, 159, 64, 0.2)',   // Pending (Orange)
+                        'rgba(255, 99, 132, 0.2)'    // Cancelled (Red)
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',     // Total Requests (Blue)
+                        'rgba(34, 139, 34, 1)',      // Completed (Darker Green)
+                        'rgba(255, 159, 64, 1)',     // Pending (Orange)
+                        'rgba(255, 99, 132, 1)'      // Cancelled (Red)
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,  // Y-axis starts at 0
+                        title: {
+                            display: true,
+                            text: 'Number of Requests'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Request Type'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Hide legend if not needed
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Summary</title>
+
+    <!-- Link to Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color: #e0f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color:  #8dcece;
+            color: white;
+            padding: 15px;
+        }
+
+        .header .title {
+            font-size: 1.5em;
+        }
+
+        .header nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header nav a {
+            text-decoration: none;
+            color: white;
+            font-size: 1em;
+        }
+
+        .header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        h2 {
+            color: #003366;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <div class="header">
+        <div>Summary</div>
+        <nav>
+            <a href="{{url_for('professional_dashboard')}}">Home</a>
+            <a href="{{ url_for('professional_profile') }}">Profile</a>
+            <a href="{{ url_for('service_history') }}">Service History</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h2>Request Status Summary</h2>
+        
+        
+        <!-- Bar Chart -->
+        <canvas id="requestChart" width="200" height="50"></canvas>
+    </div>
+
+    <script>
+        // Get the data from the backend or set them dynamically from Python (flask)
+        var ctx = document.getElementById('requestChart').getContext('2d');
+        var requestChart = new Chart(ctx, {
+            type: 'bar',  // Bar chart type
+            data: {
+                labels: ['Total Requests', 'Completed Requests', 'Pending Requests', 'Cancelled Requests'], // X-axis labels
+                datasets: [{
+                    label: 'Request Counts',
+                    data: ['{{ total_requests }}', '{{ completed_requests }}', '{{ pending_requests }}', ' {{ cancelled_requests }}'] ,// Data from Flask
+                        backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',   // Total Requests (Blue)
+                        'rgba(34, 139, 34, 0.3)',    // Completed (Darker Green)
+                        'rgba(255, 159, 64, 0.2)',   // Pending (Orange)
+                        'rgba(255, 99, 132, 0.2)'    // Cancelled (Red)
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',     // Total Requests (Blue)
+                        'rgba(34, 139, 34, 1)',      // Completed (Darker Green)
+                        'rgba(255, 159, 64, 1)',     // Pending (Orange)
+                        'rgba(255, 99, 132, 1)'      // Cancelled (Red)
+                    ],
+
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,  // Y-axis starts at 0
+                        title: {
+                            display: true,
+                            text: 'Number of Requests'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Request Type'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Hide legend if not needed
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
+s

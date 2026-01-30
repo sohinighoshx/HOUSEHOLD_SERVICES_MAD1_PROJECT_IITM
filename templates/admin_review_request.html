@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Review Service Request</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5; /* Light gray background */
+            color: #333333; /* Charcoal black text */
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #001F3F; /* Primary accent - Dark blue */
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 1.5rem;
+        }
+
+        .navbar nav a {
+            color: #FFD700; /* Secondary accent - Gold */
+            text-decoration: none;
+            margin-left: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar nav a:hover {
+            color: #001F3F; /* Dark blue on hover */
+        }
+
+        /* Page Header */
+        .header {
+            background-color: #001F3F; /* Primary accent - Dark blue */
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            color: #001F3F; /* Dark blue for headings */
+        }
+
+        .form-container input, .form-container textarea, .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .form-container button {
+            background-color: #32CD32; /* Accept button - Green */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #28a745; /* Slightly darker green on hover */
+        }
+
+        .deny {
+            background-color: #FF6347; /* Deny button - Red */
+            color: white;
+            border: none;
+        }
+
+        .deny:hover {
+            background-color: #e03e2d; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="{{ url_for('lservices') }}">Services</a>
+            <a href="{{ url_for('list_of_professionals') }}">Professionals</a>
+            <a href="{{ url_for('admin_service_requests') }}">Requests</a>
+            <a href="{{ url_for('joining_requests') }}">Join</a>
+            <a href="{{ url_for('feedbacks') }}">Feedbacks</a>
+            <a href="{{ url_for('bookings') }}">Bookings</a>
+            <a href="{{url_for('admin_summary')}}">Summary</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <div class="header">
+        <h1>Admin - Review Service Request</h1>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <h2>{{ service_request.service_name }} - Service Request</h2>
+
+        <form method="POST" action="{{ url_for('admin_review_request', request_id=service_request.id) }}">
+            <label for="price">Price:</label>
+            <input type="number" step="0.01" name="price" placeholder="Enter the price" required>
+
+            <label for="timerequired">Time Required (in hours):</label>
+            <input type="number" name="timerequired" placeholder="Enter time required" required>
+
+            <label for="description">Description:</label>
+            <textarea name="description" placeholder="Enter the service description" required>{{ service_request.description }}</textarea>
+
+            <button type="submit" name="action" value="accept">Accept Request</button>
+            <button type="submit" name="action" value="deny" class="deny">Deny Request</button>
+        </form>
+    </div>
+
+</body>
+</html>

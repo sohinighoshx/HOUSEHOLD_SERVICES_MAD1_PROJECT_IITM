@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Order has been Confirmed!</h2>
+        <h4>Order Details:</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Service ID</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Date Requested</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.service_name }}</td>
+                        <td>{{ order.service_id }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.notes }}</td>
+                        <td>{{ order.date_requested }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('view_cart') }}" class="btn btn-primary">Go to Cart</a>
+    </div>
+</body>
+</html>

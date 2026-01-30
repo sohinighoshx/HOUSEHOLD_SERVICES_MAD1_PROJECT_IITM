@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #F5F5F5; /*background color*/
+      color: #1f1e1e; /*Text color of the (list elements) body*/
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #001F3F; /* background color of the header*/
+      color: rgb(255, 255, 255);
+      padding: 1.5rem 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    nav {
+      margin-top: 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #FFD700; /* nav button colours */
+      margin: 0 1rem;
+      padding: 0.7rem 1.2rem;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #FFD700; /* hover bgcolour */
+      color: #001F3F; /*text on hover */
+      border-color: #001F3F;
+    }
+
+    table {
+      width: 90%;
+      margin: 2rem auto;
+      border-collapse: collapse;
+      background: #fff; /* bgcolour for the table */
+      border: 1px solid #ddd; /* border */
+    }
+
+    th, td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #F0F0F0; /* table header colour */
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #333;/*color of the text*/
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9; /* Subtle alternate row color */
+    }
+
+    tr:hover {
+      background-color: #f0f0f0; /* Slight hover effect */
+    }
+
+    td[colspan] {
+      text-align: center;
+      font-style: italic;
+      color: #666;
+    }
+
+    footer {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 0.9rem;
+      color: #333;
+    }
+  </style>
+</head>
+<body> 
+  <!-- headings -->
+  <header>
+    <h1>List of Services</h1>
+    <nav>
+      <a href="{{url_for('admin_dashboard')}}">Home</a>
+      <a href="{{ url_for('list_of_professionals') }}">Professionals</a>
+      <a href="{{url_for('admin_service_requests')}}">Service Requests</a>
+      <a href="{{ url_for('joining_requests') }}">Joining Requests</a>
+      <a href="{{url_for('feedbacks')}}">Feedbacks</a>
+      <a href="{{ url_for('bookings') }}">Bookings</a>
+      <a href="{{url_for('admin_summary')}}">Summary</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+
+    </nav>
+  </header>
+  <!-- table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Service Name</th>
+        <th>Description</th>
+        <th>Price(Per hours)</th>
+        <th>Time Required (Hours)</th>
+        <th>Actions</th> <!-- New column for actions -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for service in services %}
+      <tr>
+        <td>{{ service.name }}</td>
+        <td>{{ service.description }}</td>
+        <td>{{ service.price }}</td>
+        <td>{{ service.timerequired }}</td>
+        <td>
+          <!-- Action buttons -->
+          <a href="{{ url_for('edit_service', service_id=service.id) }}" 
+             style="color: #007BFF; text-decoration: none; margin-right: 10px;">Edit</a>
+          <a href="{{ url_for('delete_service', service_id=service.id) }}" 
+             style="color: #FF0000; text-decoration: none;" 
+             onclick="return confirm('Are you sure you want to delete this service?');">Delete</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5">No services available.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+
+  <footer>
+    &copy; 2024 Household Services. All rights reserved.
+  </footer>
+</body>
+</html>

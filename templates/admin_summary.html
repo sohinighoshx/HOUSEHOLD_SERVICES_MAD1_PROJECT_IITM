@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0px;
+        }
+        header {
+            background-color: #001F3F; /* background color of the header*/
+            color: rgb(255, 255, 255);
+            padding: 1rem;;
+            width: 100%;
+            text-align: center;
+          }
+      
+          h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+          }
+      
+          nav {
+            margin-top: 1rem;
+          }
+      
+          nav a {
+            text-decoration: none;
+            color: #FFD700; /* nav button colours */
+            margin: 0 1rem;
+            padding: 0.7rem 1.2rem;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s, color 0.3s;
+          }
+      
+          nav a:hover {
+            background-color: #FFD700; /* hover bgcolour */
+            color: #001F3F; /*text on hover */
+            border-color: #001F3F;
+          }
+        .chart-container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        canvas {
+            height: 400px !important; /* Force height for the canvas */
+            width: 50% !important;   /* Force width to fill the container */
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <h1>Summary</h1>
+        <nav>
+            <!-- Flask dynamic links -->
+            <a href="{{url_for('admin_dashboard')}}">Home</a>
+            <a href="{{ url_for('lservices') }}">Services</a>
+            <a href="{{ url_for('list_of_professionals') }}">Professionals</a>
+            <a href="{{url_for('admin_service_requests')}}">Service Requests</a>
+            <a href="{{ url_for('joining_requests') }}">Joining Requests</a>
+            <a href="{{url_for('feedbacks')}}">Feedbacks</a>
+            <a href="{{ url_for('bookings') }}">Bookings</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+
+        </nav>
+    </header>
+    
+
+    <div class="chart-container">
+        <h2>User Statistics</h2>
+        <canvas id="userChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h2>Order Statistics</h2>
+        <canvas id="orderChart"></canvas>
+    </div>
+
+    <script>
+        // User Statistics Bar Chart
+        const userCtx = document.getElementById('userChart').getContext('2d');
+        const userChart = new Chart(userCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Users', 'Customers', 'Professionals'],
+                datasets: [{
+                    label: 'Number of Users',
+                    data: ['{{ total_users }}',' {{ total_customers }}', '{{ total_professionals }}'],
+                    backgroundColor: ['#36A2EB', '#4BC0C0', '#FF6384']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'User Statistics'
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'User Types'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Count'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Order Statistics Pie Chart
+        const orderCtx = document.getElementById('orderChart').getContext('2d');
+        const orderChart = new Chart(orderCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Total Orders', 'Completed Orders', 'Rejected Orders', 'Pending Orders'],
+                datasets: [{
+                    data: ['{{ total_orders }}', '{{ completed_orders }}', '{{ rejected_orders }}', '{{ pending_orders }}'],
+                    backgroundColor: ['#FFCE56', '#36A2EB', '#FF6384', '#4BC0C0']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Order Statistics'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

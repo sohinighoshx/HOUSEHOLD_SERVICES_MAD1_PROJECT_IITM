@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History</title>
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color: #e0f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+        }
+
+        .header div {
+            text-align: center;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .header div:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-confirm {
+            font-family:'Dosis', cursive;
+            background-color: #32CD32;
+            color: white;
+        }
+        .btn-confirm:disabled {
+            font-family:'Dosis', cursive;
+            background-color: #ddd;
+            color: #888;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+         <div>Booking History</div>
+        <div><a href="{{ url_for('customer_dashboard') }}">Home</a></div>
+        <div><a href="{{ url_for('customer_profile')}}">Profile</a></div>
+        <div><a href="{{ url_for('services') }}">Services</a></div>
+        <div><a href="{{url_for('create_service_request')}}">Create an service request</a></div>
+        <div><a href="{{ url_for('view_cart') }}">Cart</a></div>
+        <div><a href="{{url_for('request_summary')}}">Summary</a></div>
+        <a href="{{ url_for('logout') }}">Logout</a>
+
+    </div>
+
+    <h1>Booking History</h1>
+
+    {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Provider Name</th>
+                    <th>Date Requested</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.service.name }}</td>
+                        <td>{{ order.provider.name if order.provider else 'No Provider Assigned' }}</td>
+                        <td>{{ order.date_requested }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.notes }}</td>
+                        <td>
+                            <!-- Mark Complete Button -->
+                            <form action="{{ url_for('mark_complete_customer', request_id=order.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn-confirm" 
+                                    {% if order.customer_approval or order.status == 'Completed' %}disabled{% endif %}>
+                                    {% if order.customer_approval %}Approved{% else %}Mark Complete{% endif %}
+                                </button>
+                            </form>
+
+                            <!-- Feedback Button -->
+                            {% if order.status == 'Completed' and not order.feedback_given %}
+                                <form action="{{ url_for('feedback', order_id=order.id) }}" method="GET" style="display:inline;">
+                                    <button type="submit" class="btn-confirm" style="background-color: #FFA500; margin-left: 10px;">
+                                        Give Feedback
+                                    </button>
+                                </form>
+                            {% elif order.feedback_given %}
+                                <button class="btn-confirm" style="background-color: #ddd; color: #888; cursor: not-allowed; margin-left: 10px;" disabled>
+                                    Feedback Given
+                                </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no previous orders.</p>
+    {% endif %}
+
+    <a href="{{ url_for('customer_dashboard') }}">Back to Home</a>
+</body>
+</html>

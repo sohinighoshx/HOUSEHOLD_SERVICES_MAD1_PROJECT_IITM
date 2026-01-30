@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Review Service Request</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5; /* Light gray background */
+            color: #333333; /* Charcoal black text */
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #001F3F; /* Primary accent - Dark blue */
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 1.5rem;
+        }
+
+        .navbar nav a {
+            color: #FFD700; /* Secondary accent - Gold */
+            text-decoration: none;
+            margin-left: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar nav a:hover {
+            color: #FFFFFF; /* White on hover */
+        }
+
+        /* Page Header */
+        .header {
+            background-color: #001F3F; /* Primary accent - Dark blue */
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            color: #001F3F; /* Dark blue for headings */
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            font-weight: bold;
+            color: #333333; /* Charcoal black for labels */
+        }
+
+        .form-container input, 
+        .form-container textarea, 
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .form-container button {
+            background-color: #32CD32; /* Accept button - Green */
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #28a745; /* Slightly darker green on hover */
+        }
+
+        .deny {
+            background-color: #FF6347; /* Deny button - Red */
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .deny:hover {
+            background-color: #e03e2d; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <h1>Admin - Review Service Request</h1>
+        <nav>
+            <!-- Flask dynamic links -->
+            <a href="{{url_for('admin_dashboard')}}">Home</a>
+            <a href="{{ url_for('lservices') }}">Services</a>
+            <a href="{{ url_for('list_of_professionals') }}">Professionals</a>
+            <a href="{{ url_for('joining_requests') }}">Joining Requests</a>
+            <a href="{{url_for('feedbacks')}}">Feedbacks</a>
+            <a href="{{ url_for('bookings') }}">Bookings</a>
+            <a href="{{url_for('admin_summary')}}">Summary</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+
+        </nav>
+    </header>
+    <div class="request-list">
+        <h2>Pending Service Requests</h2>
+        {% for request in requests %}
+            <div class="request-item">
+                <h3>{{ request.name }}</h3>  <!-- Use 'name' directly -->
+                <p><strong>Customer Description:</strong> {{ request.description }}</p>
+                <p><strong>Pincode:</strong> {{ request.pincode }}</p>
+                <p><strong>Status:</strong> {{ request.status }}</p>
+                <p><strong>Service Allowed:</strong> {{ 'Yes' if request.allowed else 'No' }}</p>  <!-- Access 'allowed' directly -->
+                <p><strong>Service Status:</strong> {{ request.status }}</p> <!-- Use the 'status' directly -->
+
+                <form method="POST" action="{{ url_for('admin_review_request', request_id=request.id) }}" class="action-buttons">
+                    <button type="submit" name="action" value="accept" class="accept">Accept</button>
+                    <button type="submit" name="action" value="deny" class="deny">Deny</button>
+                </form>
+                
+                
+            </div>
+        {% else %}
+            <p>No pending requests.</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

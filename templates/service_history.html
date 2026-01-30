@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service History</title>
+    <style>
+        body {
+            font-family: 'Dosis', cursive;
+            background-color: #e0f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #8dcece;
+            padding: 15px;
+            color: white;
+        }
+        .header .welcome {
+            font-size: 1.2em;
+        }
+        .header nav {
+            display: flex;
+            gap: 15px;
+        }
+        .header nav a {
+            text-decoration: none;
+            color: white;
+            font-size: 1em;
+        }
+        .header nav a:hover {
+            text-decoration: underline;
+        }
+        .service-table {
+            width: 90%;
+            margin: 30px auto;
+            border-collapse: collapse;
+            font-size: 1em;
+        }
+        .service-table th, .service-table td {
+            padding: 15px;
+           
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .service-table th {
+            background-color: #f4f4f4;
+        }
+
+        .btn-confirm {
+            font-family: 'Dosis', cursive;
+            background-color: #32CD32;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .btn-confirm:hover {
+            background-color: #28a428;
+        }
+
+        .status-pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-cancelled {
+            color: red;
+            font-weight: bold;
+        }
+
+        .feedback-column {
+            width: 20%;
+        }
+
+        .no-feedback {
+            font-style: italic;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <div class="header">
+        <div class="welcome">Service History</div>
+        <nav>
+            <a href="{{ url_for('professional_dashboard') }}">Home</a>
+            <a href="{{ url_for('professional_profile') }}">Profile</a>
+            <a href="{{ url_for('professional_summary') }}">Summary</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </div>
+
+    <div style="text-align: center; font-size: 1.8em; margin-top: 20px;">
+        Service History
+    </div>
+
+    <table class="service-table">
+        <tr>
+            <th>Request ID</th>
+            <th>Service Name</th>
+            <th>Date Requested</th>
+            <th>Customer Pincode</th>
+            <th>Customer Name</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Work Completed</th>
+            <th>Customer Feedback</th>
+            <th>Customer Ratings</th>
+            <th>Actions</th>
+        </tr>
+        {% for request in service_requests %}
+        <tr>
+            <td>{{ request.id }}</td>
+            <td>{{ request.service_name }}</td>
+            <td>{{ request.date_of_request.strftime('%Y-%m-%d') }}</td>
+            <td>{{ request.pincode }}</td>
+            <td>{{ request.customer.name }}</td>
+            <td>{{ request.customer.address }}</td>
+            <td>
+                <span class="status-{{ request.status|lower }}">{{ request.status }}</span>
+            </td>
+            <td>
+                {% if request.work_completed %}
+                    <span style="color: green; font-weight: bold;">Yes</span>
+                {% else %}
+                    <span style="color: red; font-weight: bold;">No</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if request.feedback.feedback_given %}
+                    <span>{{ request.feedback.comment }}</span>
+                {% else %}
+                    <span class="no-feedback">No feedback yet</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if request.feedback.feedback_given %}
+                    <span>{{ request.feedback.rating }}/5</span>
+                {% else %}
+                    <span class="no-feedback">No rating yet</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if not request.work_completed %}
+                <form action="{{ url_for('mark_complete_professional', request_id=request.id) }}" method="POST">
+                    <button class="btn-confirm" type="submit">Mark Complete</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="11">No service history found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

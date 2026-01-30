@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List of Professionals</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      background-color: #F5F5F5; /* Light gray background */
+      color: #333333; /* Charcoal black text */
+    }
+
+    /* Navbar Styling */
+    .navbar {
+      background-color: #001F3F; /* Primary accent - Dark blue */
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      font-size: 1.5rem;
+    }
+
+    .navbar nav a {
+      color: #FFD700; /* Secondary accent - Gold */
+      text-decoration: none;
+      margin-left: 1rem;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .navbar nav a:hover {
+      background-color: #FFD700 ;
+      color: #001F3F; /* Dark blue on hover */
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 2rem;
+      color: #001F3F; /* Dark blue for heading */
+    }
+
+    table {
+      width: 80%;
+      margin: 2rem auto;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #001F3F; /* Primary accent - Dark blue */
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .btn, .block-btn {
+      background-color: #001F3F; /* Primary accent - Dark blue */
+      color: white;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover, .block-btn:hover {
+      background-color: #3700b3; /* Slightly lighter blue on hover */
+    }
+
+    .block-btn {
+      background-color: red;
+      transition: background-color 0.3s;
+    }
+
+    .block-btn:hover {
+      background-color: darkred;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <h1>Admin Dashboard</h1>
+    <nav>
+      <a href="{{url_for('admin_dashboard')}}">Home</a>
+      <a href="{{ url_for('lservices') }}">Services</a>
+      <a href="{{url_for('admin_service_requests')}}">Service Requests</a>
+      <a href="{{ url_for('joining_requests') }}">Joining Requests</a>
+      <a href="{{url_for('feedbacks')}}">Feedbacks</a>
+      <a href="{{ url_for('bookings') }}">Bookings</a>
+      <a href="{{url_for('admin_summary')}}">Summary</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <h1>List of Approved Professionals</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Address</th>
+        <th>Pincode</th>
+        <th>Service_type</th>
+        <th>Experience</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for professional in professionals %}
+      <tr>
+        <td>{{ professional.name }}</td>
+        <td>{{ professional.email }}</td>
+        <td>{{professional.password}}</td>
+        <td>{{professional.address}}</td>
+        <td>{{professional.pincode}}</td>
+        <td>{{professional.service_type}}</td>
+        <td>{{professional.experience}}</td>
+        <td>{{professional.description}}</td>
+        <td>
+          {% if not professional.blocked %}
+            <a href="{{ url_for('block_professional', professional_id=professional.id) }}" class="block-btn">Block</a>
+          {% else %}
+            <span class="text-danger">Blocked</span>
+            <a href="{{ url_for('unblock_professional', professional_id=professional.id) }}" class="btn">Unblock</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" style="text-align: center;">No professionals found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>

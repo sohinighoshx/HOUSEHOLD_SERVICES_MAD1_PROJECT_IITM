@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services</title>
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color: #e0f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+        }
+
+        .header div {
+            text-align: center;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .header div:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .action-links a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+
+        .delete-btn {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div>Services</div>
+        <div><a href="{{ url_for('customer_dashboard') }}">Home</a></div>
+        <div><a href="{{ url_for('customer_profile')}}">Profile</a></div>
+        <div><a href="{{url_for('create_service_request')}}">Create an service request</a></div>
+    
+        <div><a href="{{ url_for('booking_history') }}">Booking History</a></div>
+        <div><a href="{{ url_for('view_cart') }}">Cart</a></div>
+        <div><a href="{{url_for('request_summary')}}">Summary</a></div>
+        <a href="{{ url_for('logout') }}">Logout</a>
+
+    </div>
+
+    <h1>Available Services</h1>
+
+    <!-- Search Bar Form -->
+    <form method="POST" action="{{ url_for('services') }}" class="search-bar">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Search services..." 
+            value="{{ search_query }}"
+        >
+        <button type="submit">Search</button>
+    </form>
+
+    {% if services %}
+        <!-- Table to display the services -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Description</th>
+                    <th>Price/Hours</th>
+                    <th>Time Required</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                    <tr>
+                        <td>{{ service.name }}</td>
+                        <td>{{ service.description }}</td>
+                        <td>₹{{ service.price }} Rs.</td>
+                        <td>{{ service.timerequired }} Hours</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No services found matching your search criteria.</p>
+    {% endif %}
+
+</body>
+</html>

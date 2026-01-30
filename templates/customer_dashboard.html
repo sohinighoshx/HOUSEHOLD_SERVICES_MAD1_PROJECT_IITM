@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color: #e0f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+        .header {
+            font-family:'Dosis', cursive;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+        }
+
+        .header div {
+            text-align: center;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .header div:hover {
+            text-decoration: underline;
+        }
+
+        /* Search Bar styling */
+        .search-bar {
+            font-family:'Dosis', cursive;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .search-bar input, .search-bar select {
+            font-family:'Dosis', cursive;
+            padding: 8px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            font-family:'Dosis', cursive;
+            padding: 8px 15px;
+            background-color: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Services Container */
+        .services-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .service-card {
+            background-color: #f4f7f7;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.2em;
+        }
+
+        .btn-cart {
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Fallback message styling */
+        .no-results {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div>Welcome, {{ username }}</div>
+        <div><a href="{{ url_for('customer_dashboard') }}">Home</a></div>
+        <div><a href="{{ url_for('customer_profile')}}">Profile</a></div>
+        <div><a href="{{ url_for('services') }}">Services</a></div>
+        <div><a href="{{url_for('create_service_request')}}">Create a service request</a></div>
+    
+        <div><a href="{{ url_for('booking_history') }}">Booking History</a></div>
+        <div><a href="{{ url_for('view_cart') }}">Cart</a></div>
+        <div><a href="{{url_for('request_summary')}}">Summary</a></div>
+        <a href="{{ url_for('logout') }}">Logout</a>
+
+    </div>
+
+    <!-- Search Bar -->
+    <form method="POST" action="{{ url_for('customer_dashboard') }}" class="search-bar">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Search services..." 
+            value="{{ search_query }}"
+        >
+        <select name="category">
+            <option value="">All Services</option>
+            {% for service in services %}
+                <option 
+                    value="{{ service }}" 
+                    {% if service == selected_category %} selected {% endif %}
+                >
+                    {{ service }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Services Container -->
+    <div class="services-container">
+        {% if filtered_services %}
+            {% for service in filtered_services %}
+            <div class="service-card">
+                <h3>{{ service.name }}</h3>
+                <p>Price: {{ service.price }} Rs/hour</p>
+                <p>Time Required: {{ service.timerequired }} hour(s)</p>
+                <p>{{ service.description }}</p>
+                <form method="POST" action="{{ url_for('add_to_cart') }}">
+                    <input type="hidden" name="service_id" value="{{ service.id }}">
+                    <input type="hidden" name="user_id" value="{{ customer_id }}">
+                    <button type="submit" class="btn-cart">Add to Cart</button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-results">No services match your search criteria.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

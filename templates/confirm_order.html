@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Header styling */
+        .header {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.1em;
+            text-transform: uppercase;
+        }
+
+        .header div, .header a {
+            margin: 0 15px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+        }
+
+        .header div:hover, .header a:hover {
+            text-decoration: underline;
+            color: #ffe600;
+        }
+
+        /* Container for order confirmation */
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container h2 {
+            color: #4CAF50;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .container h4 {
+            color: #555;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        table td {
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Button styling */
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div>Confirm Order</div>
+        <a href="{{ url_for('customer_dashboard') }}">Home</a>
+        <a href="{{ url_for('customer_profile') }}">Profile</a>
+        <a href="{{ url_for('services') }}">Services</a>
+        <a href="{{ url_for('create_service_request') }}">Create a Service Request</a>
+        <a href="{{ url_for('booking_history') }}">Booking History</a>
+        <a href="{{ url_for('view_cart') }}">Cart</a>
+        <a href="{{ url_for('request_summary') }}">Summary</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="container">
+        <h2>Your Order has been Confirmed!</h2>
+        <h4>Order Details:</h4>
+
+        <!-- Order Details Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Provider</th>
+                    <th>Provider Name</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Date Requested</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.service.name }}</td>
+                        <td>{{ order.provider_id if order.provider_id else 'Not Assigned' }}</td>
+                        <td>{{order.provider.name if order.provider_id else 'Not Assigned'}}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.notes }}</td>
+                        <td>{{ order.date_requested }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Go to Cart Button -->
+        <a href="{{ url_for('view_cart') }}" class="btn">Go to Cart</a>
+    </div>
+</body>
+</html>

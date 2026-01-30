@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Service</title>
+</head>
+<body>
+  <h1>Edit Service</h1>
+  <form action="{{ url_for('edit_service', service_id=service.id) }}" method="post">
+    <label for="name">Service Name:</label>
+    <input type="text" id="name" name="name" value="{{ service.name }}" required>
+    <br><br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required>{{ service.description }}</textarea>
+    <br><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" value="{{ service.price }}" step="0.01" required>
+    <br><br>
+
+    <label for="timerequired">Time Required (Hours):</label>
+    <input type="number" id="timerequired" name="timerequired" value="{{ service.timerequired }}" required>
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+    <a href="{{ url_for('lservices') }}">Cancel</a>
+  </form>
+</body>
+</html>

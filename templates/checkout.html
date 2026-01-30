@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family:'Dosis', cursive;
+            background-color: #e0f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+        .header {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+        }
+
+        .header div {
+            text-align: center;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .header div:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div>Checkout</div>
+        <div><a href="{{ url_for('customer_dashboard') }}">Home</a></div>
+        <div><a href="{{ url_for('customer_profile')}}">Profile</a></div>
+        <div><a href="{{ url_for('services') }}">Services</a></div>
+        <div><a href="{{url_for('create_service_request')}}">Create a Service Request</a></div>
+        <div><a href="{{ url_for('booking_history') }}">Booking History</a></div>
+        <div><a href="{{ url_for('view_cart') }}">Cart</a></div>
+        <div><a href="{{url_for('request_summary')}}">Summary</a></div>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <h1>Checkout</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Cart Item ID</th>
+                <th>Order Name</th>
+                <th>Customer Name</th>
+                <th>Customer ID</th>
+                <th>Provider Name</th>
+                <th>Provider ID</th>
+                <th>Quantity</th>
+                <th>Time (for one service)</th>
+                <th>Price (for one service)</th>
+                <th>Total Price</th>
+                <th>Total Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.service_name }}</td>
+                <td>{{ item.customer.name }}</td>
+                <td>{{ item.customer.id }}</td>
+                <td>{{ item.service.professionals[0].name if item.service.professionals else 'No provider' }}</td>
+                <td>{{ item.service.professionals[0].id if item.service.professionals else 'N/A' }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.service.timerequired if item.service else 'N/A' }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.price * item.quantity }}</td> <!-- Total price for this item -->
+                <td>{{ item.service.timerequired * item.quantity if item.service else 'N/A' }}</td> <!-- Total time for this item -->
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="9" style="text-align: right; font-weight: bold;">Total:</td>
+                <td>{{ total }}</td>
+                <td>{{ time }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Form to submit the order confirmation -->
+    <form method="POST" action="{{ url_for('confirm_order') }}">
+        <button type="submit" class="btn btn-success">Confirm Order</button>
+    </form>
+</body>
+</html>

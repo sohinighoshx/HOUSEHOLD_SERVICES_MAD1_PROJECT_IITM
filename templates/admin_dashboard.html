@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      background-color: #F5F5F5; /* Light gray background */
+      color: #333333; /* Charcoal black text */
+    }
+
+    .navbar {
+      background-color: #001F3F; /* Primary accent - Dark blue */
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      font-size: 1.5rem;
+    }
+
+    .navbar nav a {
+      color: #FFD700; 
+      text-decoration: none;
+      margin-left: 1rem;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .navbar nav a:hover {
+      background-color:#FFD700 ;
+      color: #001F3F; 
+      border-color: #001F3F;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .create-service h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: #333333;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #001F3F; /* Primary accent on focus */
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #001F3F; 
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #3700b3; 
+    }
+  </style>
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+  
+  <header class="navbar">
+    <h1>Admin Dashboard</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="{{ url_for('lservices') }}">Services</a>
+      <a href="{{ url_for('list_of_professionals') }}">Professionals</a>
+      <a href="{{url_for('admin_service_requests')}}">Service Requests</a>
+      <a href="{{ url_for('joining_requests') }}">Joining Requests</a>
+      <a href="{{url_for('feedbacks')}}">Feedbacks</a>
+      <a href="{{ url_for('bookings') }}">Bookings</a>
+      <a href="{{url_for('admin_summary')}}">Summary</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+
+    </nav>
+  </header>
+
+  <main>
+    <section class="create-service">
+      <h2>Create a New Service Category</h2>
+      <form action="{{ url_for('add_service') }}" method="POST">
+        <div class="form-group">
+          <label for="service-name">Service Name:</label>
+          <input type="text" id="service-name" name="service_name" required>
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="price">Price(Per hours):</label>
+          <input type="number" id="price" name="price" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="time-required">Time Required (Hours):</label>
+          <input type="number" id="time-required" name="time_required" required>
+        </div>
+        <button type="submit" class="btn">Add</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
