@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Profile</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f4f7fc;
+            color: #1a2332;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #0a1e2f;
+            color: #ffffff;
+            width: 100%;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-bottom: 2px solid #c9a84c;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 1.6rem;
+            color: #c9a84c;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .logo span {
+            color: #c9a84c;
+            font-weight: 300;
+        }
+
+        .user-greeting {
+            font-size: 0.85rem;
+            color: #d1d9e6;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem 0.4rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #d1d9e6;
+            font-weight: 500;
+            padding: 0.35rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+            background: rgba(201, 168, 76, 0.15);
+            border-color: rgba(201, 168, 76, 0.3);
+        }
+
+        nav a.active {
+            color: #c9a84c;
+            background: rgba(201, 168, 76, 0.1);
+            border-color: rgba(201, 168, 76, 0.2);
+        }
+
+        .nav-logout {
+            color: #e8a0a0 !important;
+        }
+        .nav-logout:hover {
+            color: #ff6b6b !important;
+            border-color: rgba(255, 107, 107, 0.3) !important;
+            background: rgba(255, 107, 107, 0.1) !important;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 600px;
+            width: 95%;
+            margin: 2rem auto;
+        }
+
+        /* ===== PROFILE CARD ===== */
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eef2f6;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0a1e2f 0%, #1a4060 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .profile-title h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0a1e2f;
+            letter-spacing: -0.3px;
+        }
+
+        .profile-title p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 0.1rem;
+        }
+
+        .profile-title p i {
+            color: #c9a84c;
+            margin-right: 4px;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1a2332;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group label i {
+            color: #c9a84c;
+            width: 1.2rem;
+            margin-right: 4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8fafc;
+            transition: all 0.2s;
+            font-family: inherit;
+            color: #1a2332;
+        }
+
+        .form-group input:focus {
+            border-color: #0a1e2f;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 30, 47, 0.08);
+            background: white;
+        }
+
+        .form-group input:read-only {
+            background: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .form-group .hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-update {
+            width: 100%;
+            padding: 0.8rem;
+            background: #0a1e2f;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-update:hover {
+            background: #1a3a5c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 30, 47, 0.15);
+        }
+
+        .btn-update:active {
+            transform: translateY(0);
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            background: transparent;
+            color: #64748b;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            font-family: inherit;
+            margin-top: 1rem;
+        }
+
+        .btn-back:hover {
+            background: #f1f5f9;
+            border-color: #c9a84c;
+            color: #0a1e2f;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .action-row .btn-back {
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            .logo {
+                justify-content: center;
+            }
+            nav {
+                justify-content: center;
+            }
+            .user-greeting {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .profile-card {
+                padding: 1.5rem;
+            }
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .action-row {
+                flex-direction: column;
+            }
+        }
+
+        /* ===== FLASH MESSAGES ===== */
+        .flash-messages {
+            max-width: 600px;
+            width: 95%;
+            margin: 0 auto 1rem;
+        }
+
+        .flash {
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 500;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            margin-bottom: 0.4rem;
+            border-left: 4px solid;
+        }
+
+        .flash.success {
+            border-left-color: #22c55e;
+            color: #14532d;
+        }
+        .flash.error {
+            border-left-color: #ef4444;
+            color: #7f1d1d;
+        }
+        .flash.info {
+            border-left-color: #3b82f6;
+            color: #1e3a8a;
+        }
+
+        .fw-semibold {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <h1>Service<span>Hub</span></h1>
+            </div>
+
+           
+
+            <nav>
+                <a href="{{ url_for('customer_dashboard') }}">Home</a>
+                <a href="{{ url_for('customer_profile') }}" class="active">Profile</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('create_service_request') }}">Request</a>
+                <a href="{{ url_for('booking_history') }}">History</a>
+                <a href="{{ url_for('view_cart') }}">Cart</a>
+                <a href="{{ url_for('request_summary') }}">Summary</a>
+                <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== FLASH MESSAGES ===== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+        <div class="profile-card">
+
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    {{ customer.name[0]|upper }}
+                </div>
+                <div class="profile-title">
+                    <h2>My Profile</h2>
+                    <p>
+                        <i class="fas fa-envelope"></i> {{ customer.email }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Profile Form -->
+            <form method="POST" action="{{ url_for('customer_profile') }}">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i> Full Name
+                    </label>
+                    <input type="text" id="name" name="name" value="{{ customer.name }}" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-id-badge"></i> Username
+                    </label>
+                    <input type="text" id="username" value="{{ customer.username }}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input type="email" id="email" name="email" value="{{ customer.email }}" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address">
+                            <i class="fas fa-map-pin"></i> Address
+                        </label>
+                        <input type="text" id="address" name="address" value="{{ customer.address }}" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">
+                            <i class="fas fa-mailbox"></i> Pincode
+                        </label>
+                        <input type="text" id="pincode" name="pincode" value="{{ customer.pincode }}" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> New Password
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Leave blank to keep unchanged" />
+                    <div class="hint">
+                        <i class="fas fa-info-circle"></i> Only fill this if you want to change your password
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-update">
+                    <i class="fas fa-save"></i> Update Profile
+                </button>
+            </form>
+
+            <!-- Action Row -->
+            <div class="action-row">
+                <a href="{{ url_for('customer_dashboard') }}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Services · ServiceHub</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f4f7fc;
+            color: #1a2332;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #0a1e2f;
+            color: #ffffff;
+            width: 100%;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-bottom: 2px solid #c9a84c;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 1.6rem;
+            color: #c9a84c;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .logo span {
+            color: #c9a84c;
+            font-weight: 300;
+        }
+
+        .user-greeting {
+            font-size: 0.85rem;
+            color: #d1d9e6;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem 0.4rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #d1d9e6;
+            font-weight: 500;
+            padding: 0.35rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+            background: rgba(201, 168, 76, 0.15);
+            border-color: rgba(201, 168, 76, 0.3);
+        }
+
+        nav a.active {
+            color: #c9a84c;
+            background: rgba(201, 168, 76, 0.1);
+            border-color: rgba(201, 168, 76, 0.2);
+        }
+
+        .nav-logout {
+            color: #e8a0a0 !important;
+        }
+        .nav-logout:hover {
+            color: #ff6b6b !important;
+            border-color: rgba(255, 107, 107, 0.3) !important;
+            background: rgba(255, 107, 107, 0.1) !important;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1.5rem auto 2rem;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #0a1e2f;
+            letter-spacing: -0.3px;
+        }
+
+        .page-header h2 i {
+            color: #c9a84c;
+            margin-right: 0.5rem;
+        }
+
+        .page-header .count-badge {
+            background: #eef2f6;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1a2332;
+        }
+
+        /* ===== SEARCH BAR ===== */
+        .search-section {
+            background: white;
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .search-section form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            flex: 1;
+            align-items: center;
+        }
+
+        .search-section input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+            transition: all 0.2s;
+            font-family: inherit;
+            color: #1a2332;
+        }
+
+        .search-section input:focus {
+            border-color: #0a1e2f;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 30, 47, 0.08);
+            background: white;
+        }
+
+        .search-section button {
+            padding: 0.6rem 1.8rem;
+            background: #0a1e2f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .search-section button:hover {
+            background: #1a3a5c;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(10, 30, 47, 0.2);
+        }
+
+        .search-section .clear-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .search-section .clear-link:hover {
+            color: #1a2332;
+            background: #f1f5f9;
+        }
+
+        /* ===== SERVICES GRID ===== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #eef2f6;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+            border-color: #d1d9e6;
+        }
+
+        .service-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card .service-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0a1e2f;
+            letter-spacing: -0.2px;
+        }
+
+        .service-card .price-badge {
+            background: #f1f5f9;
+            padding: 0.15rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #0a1e2f;
+        }
+
+        .service-card .service-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0.5rem 0 0.75rem;
+            flex: 1;
+        }
+
+        .service-card .service-meta {
+            display: flex;
+            gap: 1.2rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            padding: 0.5rem 0;
+            border-top: 1px solid #f1f5f9;
+            margin-top: auto;
+        }
+
+        .service-card .service-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .service-card .service-meta i {
+            color: #c9a84c;
+            width: 1rem;
+        }
+
+        .btn-details {
+            width: 100%;
+            padding: 0.6rem;
+            background: #f8fafc;
+            color: #0a1e2f;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            margin-top: 0.75rem;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-details:hover {
+            background: #0a1e2f;
+            color: white;
+            border-color: #0a1e2f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(10, 30, 47, 0.15);
+        }
+
+        .btn-details i {
+            margin-right: 6px;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #94a3b8;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #d1d9e6;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        .empty-state .sub-text {
+            font-size: 0.85rem;
+            color: #b8c9e0;
+            margin-top: 4px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            .logo {
+                justify-content: center;
+            }
+            nav {
+                justify-content: center;
+            }
+            .user-greeting {
+                text-align: center;
+            }
+            .search-section form {
+                flex-direction: column;
+                width: 100%;
+            }
+            .search-section input {
+                width: 100%;
+            }
+            .search-section button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <h1>Service<span>Hub</span></h1>
+            </div>
+
+          
+
+            <nav>
+                <a href="{{ url_for('customer_dashboard') }}">Home</a>
+                <a href="{{ url_for('customer_profile') }}">Profile</a>
+                <a href="{{ url_for('services') }}" class="active">Services</a>
+                <a href="{{ url_for('create_service_request') }}">Request</a>
+                <a href="{{ url_for('booking_history') }}">History</a>
+                <a href="{{ url_for('view_cart') }}">Cart</a>
+                <a href="{{ url_for('request_summary') }}">Summary</a>
+                <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2>
+                <i class="fas fa-concierge-bell"></i> Available Services
+            </h2>
+            <span class="count-badge">{{ services|length }} services</span>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <form method="POST" action="{{ url_for('services') }}">
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Search for a service..." 
+                    value="{{ search_query if search_query else '' }}"
+                />
+                <button type="submit">Search</button>
+            </form>
+            {% if search_query %}
+                <a href="{{ url_for('services') }}" class="clear-link">Clear search</a>
+            {% endif %}
+        </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid">
+            {% if services %}
+                {% for service in services %}
+                <div class="service-card">
+                    <div class="card-header">
+                        <span class="service-name">{{ service.name }}</span>
+                        <span class="price-badge">₹{{ service.price }}/hr</span>
+                    </div>
+                    <p class="service-description">{{ service.description }}</p>
+                    <div class="service-meta">
+                        <span><i class="fas fa-clock"></i> {{ service.timerequired }} hour(s)</span>
+                        <span><i class="fas fa-tag"></i> {{ service.category or 'General' }}</span>
+                    </div>
+                    <a href="#" class="btn-details">
+                        <i class="fas fa-info-circle"></i> View Details
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <p>No services found matching your search.</p>
+                    <p class="sub-text">Try adjusting your search terms</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

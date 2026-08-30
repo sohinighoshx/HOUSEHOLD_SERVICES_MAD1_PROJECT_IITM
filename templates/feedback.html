@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Feedback · ServiceHub</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    >
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f0f4f9;
+            color: #1e293b;
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        header {
+            background: #0b2a4a;
+            color: white;
+            width: 100%;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-bottom: 2px solid #ffd966;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+        }
+
+        header h1 i {
+            color: #ffd966;
+            font-size: 1.3rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.6rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f0f7ff;
+            font-weight: 500;
+            padding: 0.4rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid transparent;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        nav a i {
+            color: #ffd966;
+            font-size: 0.75rem;
+        }
+
+        nav a:hover {
+            background: #ffd966;
+            color: #0b2a4a;
+            border-color: #ffd966;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 215, 0, 0.2);
+        }
+
+        nav a:hover i {
+            color: #0b2a4a;
+        }
+
+        .logout-link {
+            background: rgba(255, 70, 70, 0.12);
+            border-color: rgba(185, 28, 28, 0.2);
+        }
+
+        .logout-link i {
+            color: #f87171;
+        }
+
+        .logout-link:hover {
+            background: #b91c1c;
+            color: white;
+            border-color: #b91c1c;
+        }
+
+        .logout-link:hover i {
+            color: white;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        main {
+            width: 95%;
+            max-width: 720px;
+            margin: 2rem auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title h2 {
+            color: #0b2a4a;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .page-title h2 i {
+            color: #f59e0b;
+            margin-right: 6px;
+            font-size: 1.2rem;
+        }
+
+        .page-title p {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* =====================================================
+           FEEDBACK CARD
+        ===================================================== */
+
+        .feedback-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5eaf0;
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #eef2f6;
+        }
+
+        .card-heading-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff4d6;
+            color: #f59e0b;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .card-heading h3 {
+            color: #0b2a4a;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-heading p {
+            color: #64748b;
+            font-size: 0.78rem;
+            margin-top: 2px;
+        }
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            color: #0b2a4a;
+            font-weight: 600;
+            font-size: 0.82rem;
+            margin-bottom: 5px;
+        }
+
+        label i {
+            color: #f59e0b;
+            margin-right: 4px;
+            font-size: 0.8rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d7dee7;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.2s ease;
+            font-family: inherit;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px 14px;
+            border: 1px solid #d7dee7;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 0.9rem;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #ffd966;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 217, 102, 0.15);
+        }
+
+        input[type="number"]:hover,
+        textarea:hover {
+            border-color: #c3ccd7;
+        }
+
+        .hint {
+            margin-top: 4px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        /* =====================================================
+           RATING BOX
+        ===================================================== */
+
+        .rating-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            padding: 7px 12px;
+            background: #fffaf0;
+            border-radius: 8px;
+            color: #64748b;
+            font-size: 0.7rem;
+        }
+
+        .rating-info i {
+            color: #facc15;
+            font-size: 0.7rem;
+        }
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        .submit-btn {
+            width: 100%;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 10px;
+            background: #0b2a4a;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .submit-btn i {
+            color: #ffd966;
+            font-size: 0.85rem;
+        }
+
+        .submit-btn:hover {
+            background: #123d67;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(11, 42, 74, 0.18);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* =====================================================
+           FOOTER NOTE
+        ===================================================== */
+
+        .privacy-note {
+            margin-top: 14px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        .privacy-note i {
+            color: #15803d;
+            margin-right: 4px;
+            font-size: 0.7rem;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+            .header-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 0.8rem 1rem;
+            }
+            header h1 {
+                font-size: 1.2rem;
+            }
+            nav a {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+            }
+            main {
+                width: 92%;
+                margin: 1.2rem auto;
+            }
+            .page-title h2 {
+                font-size: 1.2rem;
+            }
+            .feedback-card {
+                padding: 1.2rem 1.2rem;
+                border-radius: 16px;
+            }
+            .card-heading h3 {
+                font-size: 0.95rem;
+            }
+            .card-heading-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 0.85rem;
+            }
+            input[type="number"],
+            textarea {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+            .rating-info {
+                font-size: 0.65rem;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .submit-btn {
+                font-size: 0.85rem;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+    <div class="header-content">
+        <h1>
+            <i class="fas fa-comment-dots"></i>
+            Feedback
+        </h1>
+
+        <nav>
+            <a href="{{ url_for('customer_dashboard') }}">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+            <a href="{{ url_for('services') }}">
+                <i class="fas fa-concierge-bell"></i>
+                Services
+            </a>
+            <a href="{{ url_for('bookings') }}">
+                <i class="fas fa-calendar-check"></i>
+                My Bookings
+            </a>
+            <a href="{{ url_for('logout') }}" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+    <div class="page-title">
+        <h2>
+            <i class="fas fa-heart"></i>
+            Share Your Experience
+        </h2>
+        <p>Your feedback helps us improve our services</p>
+    </div>
+
+    <section class="feedback-card">
+
+        <div class="card-heading">
+            <div class="card-heading-icon">
+                <i class="fas fa-pen"></i>
+            </div>
+            <div>
+                <h3>Give Us Your Feedback</h3>
+                <p>Tell us how your service experience was</p>
+            </div>
+        </div>
+
+        <form method="POST">
+
+            <!-- Rating -->
+            <div class="form-group">
+                <label for="rating">
+                    <i class="fas fa-star"></i>
+                    Rating
+                </label>
+                <input
+                    type="number"
+                    id="rating"
+                    name="rating"
+                    min="1"
+                    max="5"
+                    step="1"
+                    placeholder="Enter a rating from 1 to 5"
+                    required
+                >
+                <div class="rating-info">
+                    <i class="fas fa-star"></i>
+                    <span>
+                        1 = Poor &nbsp; · &nbsp;
+                        2 = Fair &nbsp; · &nbsp;
+                        3 = Good &nbsp; · &nbsp;
+                        4 = Very Good &nbsp; · &nbsp;
+                        5 = Excellent
+                    </span>
+                </div>
+            </div>
+
+            <!-- Comment -->
+            <div class="form-group">
+                <label for="comment">
+                    <i class="fas fa-comment"></i>
+                    Comments
+                </label>
+                <textarea
+                    id="comment"
+                    name="comment"
+                    rows="5"
+                    placeholder="Tell us about your experience..."
+                    required
+                ></textarea>
+                <div class="hint">
+                    Share any suggestions that could help us improve
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i>
+                Submit Feedback
+            </button>
+
+        </form>
+
+        <div class="privacy-note">
+            <i class="fas fa-shield-alt"></i>
+            Your feedback helps us maintain and improve service quality
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

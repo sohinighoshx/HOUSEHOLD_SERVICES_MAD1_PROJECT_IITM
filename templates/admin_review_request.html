@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Review Service Request</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- global reset & theme (matches other pages) ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f9;
+            color: #1e293b;
+            padding: 0 0 2rem 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ----- HEADER (shared) ----- */
+        header {
+            background: #0b2a4a;
+            color: white;
+            width: 100%;
+            padding: 1.2rem 2rem 1rem 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-bottom: 2px solid #ffd966;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-content h1 i {
+            color: #ffd966;
+            font-size: 1.8rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.6rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f0f7ff;
+            font-weight: 500;
+            padding: 0.45rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.06);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav a i {
+            font-size: 0.85rem;
+            color: #ffd966;
+        }
+
+        nav a:hover {
+            background: #ffd966;
+            color: #0b2a4a;
+            border-color: #ffd966;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 14px rgba(255, 215, 0, 0.2);
+        }
+        nav a:hover i {
+            color: #0b2a4a;
+        }
+
+        .logout-link {
+            background: rgba(255, 70, 70, 0.12) !important;
+            border-color: #b91c1c40 !important;
+        }
+        .logout-link:hover {
+            background: #b91c1c !important;
+            color: white !important;
+            border-color: #b91c1c !important;
+        }
+        .logout-link:hover i {
+            color: white !important;
+        }
+
+        /* ----- main card ----- */
+        .main-card {
+            max-width: 820px;
+            width: 95%;
+            background: white;
+            border-radius: 28px;
+            padding: 2rem 2.5rem 2.8rem 2.5rem;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid #ffffff60;
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+            margin: 0.5rem auto 2rem auto;
+        }
+
+        .main-card:hover {
+            box-shadow: 0 24px 50px rgba(0, 20, 40, 0.10);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 2px solid #eef2f6;
+            padding-bottom: 1.2rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .card-header i {
+            font-size: 2.2rem;
+            color: #f59e0b;
+            background: #fef3c7;
+            padding: 12px;
+            border-radius: 18px;
+        }
+
+        .card-header .header-text h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0b2a4a;
+            letter-spacing: -0.3px;
+        }
+        .card-header .header-text .sub {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        /* ----- request info summary ----- */
+        .request-summary {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem 2rem;
+        }
+        .request-summary .item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .request-summary .item i {
+            color: #f59e0b;
+            width: 1.4rem;
+            text-align: center;
+        }
+        .request-summary .item strong {
+            color: #0b2a4a;
+            font-weight: 600;
+        }
+        .request-summary .item .value {
+            color: #1e293b;
+        }
+
+        /* ----- form styling ----- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: #1e293b;
+            letter-spacing: -0.2px;
+        }
+
+        .form-group label i {
+            color: #f59e0b;
+            width: 1.4rem;
+            margin-right: 4px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #0b2a4a;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(11, 42, 74, 0.08);
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        /* ----- action buttons ----- */
+        .action-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0.85rem 2.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.25s;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        .btn-accept {
+            background: #22c55e;
+            color: white;
+            box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+        }
+        .btn-accept:hover {
+            background: #16a34a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(34, 197, 94, 0.35);
+        }
+
+        .btn-deny {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+        }
+        .btn-deny:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0px);
+        }
+
+        /* ----- responsive ----- */
+        @media (max-width: 700px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: center;
+            }
+            .header-content h1 {
+                font-size: 1.6rem;
+            }
+            nav a {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.6rem;
+            }
+            .main-card {
+                padding: 1.5rem 1.2rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .request-summary {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .card-header .header-text h2 {
+                font-size: 1.2rem;
+            }
+            .action-row {
+                flex-direction: column;
+            }
+            .btn {
+                flex: 1 1 auto;
+                width: 100%;
+                padding: 0.7rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-card {
+                padding: 1rem 0.8rem;
+            }
+            .request-summary {
+                padding: 0.8rem 1rem;
+            }
+            .request-summary .item {
+                font-size: 0.85rem;
+            }
+        }
+
+        .required-star {
+            color: #dc2626;
+            margin-left: 2px;
+        }
+        .text-muted {
+            color: #94a3b8;
+        }
+        .fw-semibold {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-clipboard-check"></i>
+                Review Request
+            </h1>
+            <nav>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('lservices') }}"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="{{ url_for('list_of_professionals') }}"><i class="fas fa-user-tie"></i> Professionals</a>
+                <a href="{{ url_for('admin_service_requests') }}"><i class="fas fa-clipboard-list"></i> Requests</a>
+                <a href="{{ url_for('joining_requests') }}"><i class="fas fa-user-plus"></i> Joining</a>
+                <a href="{{ url_for('feedbacks') }}"><i class="fas fa-star"></i> Feedbacks</a>
+                <a href="{{ url_for('bookings') }}"><i class="fas fa-calendar-check"></i> Bookings</a>
+                <a href="{{ url_for('admin_summary') }}"><i class="fas fa-chart-pie"></i> Summary</a>
+                <a href="{{ url_for('logout') }}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== MAIN CARD ========== -->
+    <div class="main-card">
+        <div class="card-header">
+            <i class="fas fa-file-signature"></i>
+            <div class="header-text">
+                <h2>{{ service_request.service_name or 'Service Request' }}</h2>
+                <div class="sub">
+                    <i class="fas fa-user" style="color:#64748b;"></i>
+                    Requested by: <strong>{{ service_request.customer_name or 'Customer' }}</strong>
+                    &nbsp;·&nbsp;
+                    <i class="far fa-calendar-alt"></i>
+                    {{ service_request.created_at.strftime('%d %b %Y') if service_request.created_at else '—' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- request summary -->
+        <div class="request-summary">
+            <div class="item">
+                <i class="fas fa-tag"></i>
+                <span><strong>Service:</strong> <span class="value">{{ service_request.service_name or '—' }}</span></span>
+            </div>
+            <div class="item">
+                <i class="fas fa-user-tie"></i>
+                <span><strong>Professional:</strong> <span class="value">{{ service_request.professional_name or 'Unassigned' }}</span></span>
+            </div>
+            <div class="item">
+                <i class="fas fa-map-pin"></i>
+                <span><strong>Location:</strong> <span class="value">{{ service_request.location or '—' }}</span></span>
+            </div>
+            <div class="item">
+                <i class="fas fa-clock"></i>
+                <span><strong>Status:</strong>
+                    <span class="value" style="
+                        {% if service_request.status == 'pending' %}color:#b76e00;
+                        {% elif service_request.status == 'accepted' %}color:#166534;
+                        {% elif service_request.status == 'denied' %}color:#b91c1c;
+                        {% else %}color:#64748b;{% endif %}
+                        font-weight:600;">
+                        {{ service_request.status|capitalize or 'Pending' }}
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <!-- ========== FORM ========== -->
+        <form method="POST" action="{{ url_for('admin_review_request', request_id=service_request.id) }}">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">
+                        <i class="fas fa-dollar-sign"></i> Price <span class="required-star">*</span>
+                    </label>
+                    <input type="number" step="0.01" id="price" name="price"
+                           placeholder="0.00" required
+                           value="{{ service_request.price if service_request.price else '' }}" />
+                </div>
+                <div class="form-group">
+                    <label for="timerequired">
+                        <i class="fas fa-hourglass-half"></i> Time Required (hours) <span class="required-star">*</span>
+                    </label>
+                    <input type="number" id="timerequired" name="timerequired"
+                           placeholder="e.g. 2" required
+                           value="{{ service_request.timerequired if service_request.timerequired else '' }}" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">
+                    <i class="fas fa-align-left"></i> Description <span class="required-star">*</span>
+                </label>
+                <textarea id="description" name="description" rows="3"
+                          placeholder="Service description..." required>{{ service_request.description or '' }}</textarea>
+            </div>
+
+            <div class="action-row">
+                <button type="submit" name="action" value="accept" class="btn btn-accept">
+                    <i class="fas fa-check-circle"></i> Accept Request
+                </button>
+                <button type="submit" name="action" value="deny" class="btn btn-deny">
+                    <i class="fas fa-times-circle"></i> Deny Request
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <div class="footer-note" style="max-width:820px; width:95%; margin-top:0.2rem; color:#94a3b8; font-size:0.85rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+        <span><i class="far fa-calendar-alt"></i> &copy; 2024 Household Services</span>
+        <span><i class="fas fa-asterisk" style="color:#dc2626; font-size:0.6rem;"></i> Required fields</span>
+    </div>
+
+</body>
+</html>

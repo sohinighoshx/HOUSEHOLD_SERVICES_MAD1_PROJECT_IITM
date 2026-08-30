@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service History · ServiceHub</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fdf6f0;
+            color: #2d1f14;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #1a0e0a;
+            color: #f5ede6;
+            width: 100%;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid #d4a373;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 1.4rem;
+            color: #d4a373;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #f5ede6;
+        }
+
+        .logo span {
+            color: #d4a373;
+            font-weight: 300;
+        }
+
+        .user-greeting {
+            font-size: 0.8rem;
+            color: #d4c5b8;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-greeting i {
+            color: #d4a373;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem 0.4rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #d4c5b8;
+            font-weight: 500;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #f5ede6;
+            background: rgba(212, 163, 115, 0.15);
+            border-color: rgba(212, 163, 115, 0.3);
+        }
+
+        nav a.active {
+            color: #d4a373;
+            background: rgba(212, 163, 115, 0.1);
+            border-color: rgba(212, 163, 115, 0.2);
+        }
+
+        .nav-logout {
+            color: #e8c8b8 !important;
+        }
+        .nav-logout:hover {
+            color: #e88a7a !important;
+            border-color: rgba(232, 138, 122, 0.3) !important;
+            background: rgba(232, 138, 122, 0.1) !important;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1.5rem auto 2rem;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d1f14;
+            letter-spacing: -0.3px;
+        }
+
+        .page-header h2 i {
+            color: #d4a373;
+            margin-right: 0.5rem;
+        }
+
+        .page-header .count-badge {
+            background: #f0e4d8;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #4a2c1a;
+        }
+
+        /* ===== STATS ROW ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-box {
+            background: #fffbf8;
+            border-radius: 12px;
+            padding: 0.8rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0e4d8;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .stat-box .stat-icon {
+            font-size: 1.2rem;
+            color: #d4a373;
+            background: #fdf0e0;
+            padding: 0.4rem;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .stat-box .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-box .stat-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d1f14;
+            line-height: 1.2;
+        }
+
+        .stat-box .stat-label {
+            font-size: 0.6rem;
+            color: #8a7a6a;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== TABLE CARD ===== */
+        .table-card {
+            background: #fffbf8;
+            border-radius: 16px;
+            padding: 1.2rem 1.2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0e4d8;
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .table-card th {
+            text-align: left;
+            padding: 0.5rem 0.5rem 0.4rem 0.5rem;
+            font-weight: 600;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #8a7a6a;
+            border-bottom: 2px solid #f0e4d8;
+            white-space: nowrap;
+        }
+
+        .table-card td {
+            padding: 0.5rem 0.5rem;
+            border-bottom: 1px solid #f5ede6;
+            vertical-align: middle;
+            color: #2d1f14;
+        }
+
+        .table-card tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-card tr:hover td {
+            background-color: #fdf6f0;
+        }
+
+        .table-card .empty-row td {
+            text-align: center;
+            color: #b8a89a;
+            font-style: italic;
+            padding: 2rem 0.8rem;
+        }
+
+        /* ===== STATUS BADGE ===== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.1rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+        .status-pending {
+            background: #fdf0e0;
+            color: #b87a4a;
+        }
+        .status-confirmed {
+            background: #e8f0e8;
+            color: #4a7a5a;
+        }
+        .status-completed {
+            background: #dce8e0;
+            color: #2a6a4a;
+        }
+        .status-cancelled {
+            background: #f5e4e0;
+            color: #b84a3a;
+        }
+        .status-default {
+            background: #f0ece6;
+            color: #8a7a6a;
+        }
+
+        /* ===== FEEDBACK BADGE ===== */
+        .feedback-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.1rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+        .feedback-yes {
+            background: #e8f0e8;
+            color: #3a7a4a;
+        }
+        .feedback-no {
+            background: #f5ede6;
+            color: #8a7a6a;
+        }
+
+        .rating-stars {
+            color: #d4a373;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .rating-stars .empty {
+            color: #e0d8d0;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-complete {
+            background: #dce8e0;
+            color: #2a6a4a;
+            border: 1px solid #c0d8c8;
+        }
+        .btn-complete:hover {
+            background: #2a6a4a;
+            color: white;
+            border-color: #2a6a4a;
+            transform: translateY(-1px);
+        }
+
+        .btn-complete:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #b8a89a;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            color: #d4c5b8;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            color: #8a7a6a;
+        }
+
+        .empty-state .sub-text {
+            font-size: 0.8rem;
+            color: #b8a89a;
+            margin-top: 2px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            .logo {
+                justify-content: center;
+            }
+            nav {
+                justify-content: center;
+            }
+            .user-greeting {
+                text-align: center;
+            }
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .page-header h2 {
+                font-size: 1.1rem;
+            }
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+            .table-card {
+                padding: 0.8rem;
+            }
+            .table-card th,
+            .table-card td {
+                font-size: 0.68rem;
+                padding: 0.3rem 0.25rem;
+            }
+            .action-group {
+                flex-direction: column;
+                gap: 3px;
+            }
+            .btn-action {
+                font-size: 0.6rem;
+                padding: 0.15rem 0.5rem;
+            }
+            .rating-stars {
+                font-size: 0.7rem;
+            }
+        }
+
+        .fw-semibold {
+            font-weight: 600;
+        }
+        .text-muted {
+            color: #b8a89a;
+        }
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <h1>Service<span>Hub</span></h1>
+            </div>
+
+            <div class="user-greeting">
+                <i class="fas fa-user-circle" style="margin-right: 4px;"></i>
+                Welcome back
+            </div>
+
+            <nav>
+                <a href="{{ url_for('professional_dashboard') }}">Home</a>
+                <a href="{{ url_for('professional_profile') }}">Profile</a>
+                <a href="{{ url_for('service_history') }}" class="active">History</a>
+                <a href="{{ url_for('professional_summary') }}">Summary</a>
+                <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2>
+                <i class="fas fa-history"></i> Service History
+            </h2>
+            <span class="count-badge">{{ service_requests|length }} records</span>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-file-signature"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number">{{ service_requests|length }}</span>
+                    <span class="stat-label">Total Services</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number">
+                        {% set completed = 0 %}
+                        {% for req in service_requests %}
+                            {% if req.status|lower == 'completed' %}
+                                {% set completed = completed + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ completed }}
+                    </span>
+                    <span class="stat-label">Completed</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number">
+                        {% set feedback_count = 0 %}
+                        {% for req in service_requests %}
+                            {% if req.feedback and req.feedback.feedback_given %}
+                                {% set feedback_count = feedback_count + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ feedback_count }}
+                    </span>
+                    <span class="stat-label">With Feedback</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+            {% if service_requests %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Pincode</th>
+                            <th>Status</th>
+                            <th>Feedback</th>
+                            <th>Rating</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in service_requests %}
+                        <tr>
+                            <td><span class="fw-semibold">#{{ request.id }}</span></td>
+                            <td>{{ request.service_name }}</td>
+                            <td style="font-size:0.75rem; color:#8a7a6a;">{{ request.date_of_request.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <span class="fw-semibold">{{ request.customer.name }}</span>
+                            </td>
+                            <td>{{ request.pincode }}</td>
+                            <td>
+                                <span class="status-badge 
+                                    {% if request.status|lower == 'pending' %}status-pending
+                                    {% elif request.status|lower == 'confirmed' %}status-confirmed
+                                    {% elif request.status|lower == 'completed' %}status-completed
+                                    {% elif request.status|lower == 'cancelled' %}status-cancelled
+                                    {% else %}status-default{% endif %}">
+                                    <i class="fas 
+                                        {% if request.status|lower == 'pending' %}fa-clock
+                                        {% elif request.status|lower == 'confirmed' %}fa-check-circle
+                                        {% elif request.status|lower == 'completed' %}fa-check-double
+                                        {% elif request.status|lower == 'cancelled' %}fa-times-circle
+                                        {% else %}fa-circle{% endif %}"></i>
+                                    {{ request.status|capitalize }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if request.feedback and request.feedback.feedback_given %}
+                                    <span class="feedback-badge feedback-yes">
+                                        <i class="fas fa-check"></i> Given
+                                    </span>
+                                {% else %}
+                                    <span class="feedback-badge feedback-no">
+                                        <i class="fas fa-minus"></i> None
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if request.feedback and request.feedback.feedback_given %}
+                                    <span class="rating-stars">
+                                        {% for i in range(1, 6) %}
+                                            {% if i <= request.feedback.rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="fas fa-star empty"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <span style="font-size:0.7rem; color:#8a7a6a; margin-left:4px;">
+                                            {{ request.feedback.rating }}/5
+                                        </span>
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted" style="font-size:0.7rem;">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="action-group">
+                                    {% if not request.work_completed and request.status|lower != 'cancelled' %}
+                                        <form action="{{ url_for('mark_complete_professional', request_id=request.id) }}" method="POST" style="display:inline;">
+                                            <button class="btn-action btn-complete" type="submit">
+                                                <i class="fas fa-check-double"></i> Complete
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No service history found</p>
+                    <p class="sub-text">Completed services will appear here</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

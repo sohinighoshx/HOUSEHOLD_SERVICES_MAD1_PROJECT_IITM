@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Services</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- global reset & theme (matches summary) ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f9;
+            color: #1e293b;
+            padding: 0 0 2rem 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ----- HEADER (shared) ----- */
+        header {
+            background: #0b2a4a;
+            color: white;
+            width: 100%;
+            padding: 1.2rem 2rem 1rem 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-bottom: 2px solid #ffd966;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-content h1 i {
+            color: #ffd966;
+            font-size: 1.8rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.6rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f0f7ff;
+            font-weight: 500;
+            padding: 0.45rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.06);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav a i {
+            font-size: 0.85rem;
+            color: #ffd966;
+        }
+
+        nav a:hover {
+            background: #ffd966;
+            color: #0b2a4a;
+            border-color: #ffd966;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 14px rgba(255, 215, 0, 0.2);
+        }
+        nav a:hover i {
+            color: #0b2a4a;
+        }
+
+        .logout-link {
+            background: rgba(255, 70, 70, 0.12) !important;
+            border-color: #b91c1c40 !important;
+        }
+        .logout-link:hover {
+            background: #b91c1c !important;
+            color: white !important;
+            border-color: #b91c1c !important;
+        }
+        .logout-link:hover i {
+            color: white !important;
+        }
+
+        /* ----- page title (outside card) ----- */
+        .page-title {
+            max-width: 1300px;
+            width: 95%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+        .page-title h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #0b2a4a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-title h2 i {
+            color: #f59e0b;
+        }
+        .page-title .add-link {
+            background: #0b2a4a;
+            color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 4px 12px rgba(11, 42, 74, 0.15);
+        }
+        .page-title .add-link:hover {
+            background: #1a3f64;
+            transform: translateY(-2px);
+        }
+
+        /* ----- table card ----- */
+        .table-card {
+            max-width: 1300px;
+            width: 95%;
+            background: white;
+            border-radius: 24px;
+            padding: 1.8rem 1.5rem 2rem 1.5rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid #ffffff60;
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .table-card th {
+            text-align: left;
+            padding: 1rem 0.8rem 0.8rem 0.8rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            border-bottom: 2px solid #e9edf2;
+        }
+
+        .table-card td {
+            padding: 1rem 0.8rem;
+            border-bottom: 1px solid #eef2f6;
+            vertical-align: middle;
+        }
+
+        .table-card tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-card tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .table-card .empty-row td {
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 2.5rem 0.8rem;
+        }
+
+        /* action buttons */
+        .action-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.35rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-edit {
+            background: #eef2ff;
+            color: #4338ca;
+            border-color: #c7d2fe;
+        }
+        .btn-edit:hover {
+            background: #4338ca;
+            color: white;
+            border-color: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+        .btn-delete:hover {
+            background: #b91c1c;
+            color: white;
+            border-color: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        /* badge for price */
+        .price-badge {
+            background: #f1f5f9;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #0b2a4a;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        .time-badge {
+            background: #fef9c3;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 500;
+            color: #854d0e;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        /* footer */
+        .footer-note {
+            max-width: 1300px;
+            width: 95%;
+            margin-top: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: center;
+            }
+            .header-content h1 {
+                font-size: 1.6rem;
+            }
+            nav a {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.6rem;
+            }
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            .table-card {
+                padding: 1rem 0.5rem;
+            }
+            .table-card th,
+            .table-card td {
+                padding: 0.7rem 0.4rem;
+                font-size: 0.8rem;
+            }
+            .action-group {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .btn-action {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .table-card th,
+            .table-card td {
+                font-size: 0.7rem;
+                padding: 0.5rem 0.3rem;
+            }
+            .price-badge,
+            .time-badge {
+                font-size: 0.7rem;
+                padding: 0.1rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-concierge-bell"></i>
+                Services
+            </h1>
+            <nav>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('list_of_professionals') }}"><i class="fas fa-user-tie"></i> Professionals</a>
+                <a href="{{ url_for('admin_service_requests') }}"><i class="fas fa-clipboard-list"></i> Requests</a>
+                <a href="{{ url_for('joining_requests') }}"><i class="fas fa-user-plus"></i> Joining</a>
+                <a href="{{ url_for('feedbacks') }}"><i class="fas fa-star"></i> Feedbacks</a>
+                <a href="{{ url_for('bookings') }}"><i class="fas fa-calendar-check"></i> Bookings</a>
+                <a href="{{ url_for('admin_summary') }}"><i class="fas fa-chart-pie"></i> Summary</a>
+                <a href="{{ url_for('logout') }}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== PAGE TITLE + ADD BUTTON ========== -->
+    <div class="page-title">
+        <h2>
+            <i class="fas fa-list-ul"></i> All Service Categories
+        </h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="add-link">
+            <i class="fas fa-plus-circle"></i> Add New Service
+        </a>
+    </div>
+
+    <!-- ========== TABLE CARD ========== -->
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Description</th>
+                    <th>Price (per hour)</th>
+                    <th>Time Required</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td><strong>{{ service.name }}</strong></td>
+                    <td>{{ service.description }}</td>
+                    <td><span class="price-badge">${{ service.price }}</span></td>
+                    <td><span class="time-badge"><i class="far fa-clock"></i> {{ service.timerequired }} h</span></td>
+                    <td>
+                        <div class="action-group">
+                            <a href="{{ url_for('edit_service', service_id=service.id) }}" class="btn-action btn-edit">
+                                <i class="fas fa-pen"></i> Edit
+                            </a>
+                            <a href="{{ url_for('delete_service', service_id=service.id) }}" 
+                               class="btn-action btn-delete"
+                               onclick="return confirm('Are you sure you want to delete “{{ service.name }}” ?');">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr class="empty-row">
+                    <td colspan="5">
+                        <i class="fas fa-inbox" style="margin-right: 8px;"></i> No services available.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <div class="footer-note">
+        <span><i class="far fa-calendar-alt"></i> &copy; 2024 Household Services</span>
+        <span><i class="fas fa-tag"></i> {{ services|length }} service(s) listed</span>
+    </div>
+
+</body>
+</html>

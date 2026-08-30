@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register · ServiceHub</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #fdf6f0;
+            padding: 1.5rem;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .register-card {
+            background: #fffbf8;
+            border-radius: 20px;
+            padding: 2rem 2.2rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f0e4d8;
+        }
+
+        /* ===== BRAND ===== */
+        .brand {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .brand .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: #2d1f14;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand .logo i {
+            color: #d4a373;
+            font-size: 1.6rem;
+        }
+
+        .brand .logo span {
+            color: #d4a373;
+            font-weight: 300;
+        }
+
+        .brand h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d1f14;
+            margin-top: 0.4rem;
+            letter-spacing: -0.3px;
+        }
+
+        .brand p {
+            color: #8a7a6a;
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+        }
+
+        /* ===== FLASH MESSAGES ===== */
+        .flash-messages {
+            margin-bottom: 1.2rem;
+        }
+
+        .flash {
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            margin-bottom: 0.4rem;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .flash.success {
+            border-left-color: #4a7a5a;
+            color: #2a5a3a;
+        }
+        .flash.error {
+            border-left-color: #b84a3a;
+            color: #7a3a2a;
+        }
+        .flash.info {
+            border-left-color: #6a8a9a;
+            color: #2a5a6a;
+        }
+        .flash.warning {
+            border-left-color: #b87a4a;
+            color: #6a4a2a;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #2d1f14;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.2px;
+        }
+
+        .form-group label i {
+            color: #d4a373;
+            width: 1.2rem;
+            margin-right: 4px;
+        }
+
+        .form-group label .required {
+            color: #b84a3a;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            font-size: 0.9rem;
+            border: 1.5px solid #f0e4d8;
+            border-radius: 10px;
+            background: #fdf8f4;
+            transition: all 0.2s;
+            font-family: inherit;
+            color: #2d1f14;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #d4a373;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.12);
+            background: white;
+        }
+
+        .form-group input::placeholder,
+        .form-group select::placeholder,
+        .form-group textarea::placeholder {
+            color: #b8a89a;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238a7a6a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 12px;
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"] {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            background: #fdf8f4;
+        }
+
+        .form-group input[type="file"]::file-selector-button {
+            padding: 0.4rem 1rem;
+            border: 1px solid #f0e4d8;
+            border-radius: 8px;
+            background: #f5ede6;
+            color: #2d1f14;
+            font-weight: 500;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            margin-right: 0.8rem;
+        }
+
+        .form-group input[type="file"]::file-selector-button:hover {
+            background: #e8dcd0;
+            border-color: #d4a373;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .hint {
+            font-size: 0.7rem;
+            color: #b8a89a;
+            margin-top: 0.2rem;
+        }
+
+        .hint i {
+            color: #d4a373;
+            margin-right: 4px;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background: #2d1a0e;
+            color: #f5ede6;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            background: #4a2c1a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 26, 14, 0.15);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit i {
+            color: #d4a373;
+        }
+
+        /* ===== FOOTER ===== */
+        .login-link {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.85rem;
+            color: #8a7a6a;
+        }
+
+        .login-link a {
+            color: #2d1f14;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover {
+            color: #d4a373;
+            text-decoration: underline;
+        }
+
+        .login-link i {
+            color: #d4a373;
+            margin-right: 4px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 550px) {
+            .register-card {
+                padding: 1.5rem 1.2rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .brand h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+
+        <!-- ===== FLASH MESSAGES ===== -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% elif category == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- ===== REGISTER CARD ===== -->
+        <div class="register-card">
+
+            <!-- Brand -->
+            <div class="brand">
+                <a href="#" class="logo">
+                    <i class="fas fa-briefcase"></i>
+                    Service<span>Hub</span>
+                </a>
+                <h2>Create Account</h2>
+                <p>Join as a professional service provider</p>
+            </div>
+
+            <!-- Form -->
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i> Full Name <span class="required">*</span>
+                    </label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-id-badge"></i> Username <span class="required">*</span>
+                    </label>
+                    <input type="text" id="username" name="username" placeholder="Choose a unique username" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password <span class="required">*</span>
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address <span class="required">*</span>
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="address">
+                        <i class="fas fa-map-pin"></i> Address <span class="required">*</span>
+                    </label>
+                    <input type="text" id="address" name="address" placeholder="Your street address" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pincode">
+                            <i class="fas fa-mailbox"></i> Pincode <span class="required">*</span>
+                        </label>
+                        <input type="text" id="pincode" name="pincode" placeholder="Enter pincode" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="experience">
+                            <i class="fas fa-calendar-alt"></i> Experience <span class="required">*</span>
+                        </label>
+                        <input type="number" id="experience" name="experience" min="0" placeholder="Years" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="service_type">
+                        <i class="fas fa-tools"></i> Service Type <span class="required">*</span>
+                    </label>
+                    <select id="service_type" name="service_type" required>
+                        <option value="">Select your service</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Electrician">Electrician</option>
+                        <option value="Carpenter">Carpenter</option>
+                        <option value="House Cleaning">House Cleaning</option>
+                        <option value="Painter">Painter</option>
+                        <option value="Gardener">Gardener</option>
+                        <option value="Cook">Cook</option>
+                        <option value="Driver">Driver</option>
+                        <option value="Baby Sitter">Baby Sitter</option>
+                        <option value="Tutor">Tutor</option>
+                        <option value="AC Technician">AC Technician</option>
+                        <option value="Pest Control">Pest Control</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">
+                        <i class="fas fa-align-left"></i> Description <span class="required">*</span>
+                    </label>
+                    <textarea id="description" name="description" rows="3" placeholder="Describe your skills and experience" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="document">
+                        <i class="fas fa-file-upload"></i> Attach Document
+                    </label>
+                    <input type="file" id="document" name="document" accept=".pdf,.doc,.docx,.jpg,.png" />
+                    <div class="hint">
+                        <i class="fas fa-info-circle"></i> Upload certificate, ID proof, or portfolio (PDF, DOC, JPG, PNG)
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="login-link">
+                <i class="fas fa-arrow-right"></i>
+                Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart · ServiceHub</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f4f7fc;
+            color: #1a2332;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #0a1e2f;
+            color: #ffffff;
+            width: 100%;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-bottom: 2px solid #c9a84c;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 1.6rem;
+            color: #c9a84c;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .logo span {
+            color: #c9a84c;
+            font-weight: 300;
+        }
+
+        .user-greeting {
+            font-size: 0.85rem;
+            color: #d1d9e6;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem 0.4rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #d1d9e6;
+            font-weight: 500;
+            padding: 0.35rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+            background: rgba(201, 168, 76, 0.15);
+            border-color: rgba(201, 168, 76, 0.3);
+        }
+
+        nav a.active {
+            color: #c9a84c;
+            background: rgba(201, 168, 76, 0.1);
+            border-color: rgba(201, 168, 76, 0.2);
+        }
+
+        .nav-logout {
+            color: #e8a0a0 !important;
+        }
+        .nav-logout:hover {
+            color: #ff6b6b !important;
+            border-color: rgba(255, 107, 107, 0.3) !important;
+            background: rgba(255, 107, 107, 0.1) !important;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1.5rem auto 2rem;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #0a1e2f;
+            letter-spacing: -0.3px;
+        }
+
+        .page-header h2 i {
+            color: #c9a84c;
+            margin-right: 0.5rem;
+        }
+
+        .page-header .count-badge {
+            background: #eef2f6;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1a2332;
+        }
+
+        /* ===== TABLE CARD ===== */
+        .table-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eef2f6;
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .table-card th {
+            text-align: left;
+            padding: 0.8rem 0.7rem 0.6rem 0.7rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #64748b;
+            border-bottom: 2px solid #e9edf2;
+            white-space: nowrap;
+        }
+
+        .table-card td {
+            padding: 0.8rem 0.7rem;
+            border-bottom: 1px solid #eef2f6;
+            vertical-align: middle;
+        }
+
+        .table-card tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-card tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .table-card .empty-row td {
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 2.5rem 0.8rem;
+        }
+
+        /* ===== QUANTITY CONTROLS ===== */
+        .qty-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .qty-control .qty-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            color: #1a2332;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .qty-control .qty-btn:hover {
+            background: #eef2f6;
+        }
+
+        .qty-control .qty-input {
+            width: 40px;
+            height: 32px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: #1a2332;
+        }
+
+        .qty-control .qty-input:focus {
+            outline: none;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.35rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-remove {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+        .btn-remove:hover {
+            background: #b91c1c;
+            color: white;
+            border-color: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        .btn-checkout {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 2rem;
+            background: #0a1e2f;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-checkout:hover {
+            background: #1a3a5c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 30, 47, 0.15);
+        }
+
+        .btn-checkout:disabled {
+            background: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-browse {
+            display: inline-block;
+            padding: 0.6rem 1.8rem;
+            background: #0a1e2f;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-browse:hover {
+            background: #1a3a5c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 30, 47, 0.15);
+        }
+
+        /* ===== SUMMARY ===== */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #eef2f6;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .summary-item .label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .summary-item .value {
+            font-weight: 700;
+            color: #0a1e2f;
+            font-size: 1.1rem;
+        }
+
+        .summary-item .value.gold {
+            color: #c9a84c;
+        }
+
+        .summary-item .value.green {
+            color: #22c55e;
+        }
+
+        .checkout-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #d1d9e6;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        .empty-state .sub-text {
+            font-size: 0.85rem;
+            color: #b8c9e0;
+            margin-top: 4px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            .logo {
+                justify-content: center;
+            }
+            nav {
+                justify-content: center;
+            }
+            .user-greeting {
+                text-align: center;
+            }
+            .summary-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            .checkout-section {
+                justify-content: stretch;
+            }
+            .btn-checkout {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            .table-card {
+                padding: 0.8rem;
+            }
+            .table-card th,
+            .table-card td {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.3rem;
+            }
+            .qty-control .qty-btn {
+                width: 28px;
+                height: 28px;
+            }
+            .qty-control .qty-input {
+                width: 32px;
+            }
+            .btn-action {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+        }
+
+        .fw-semibold {
+            font-weight: 600;
+        }
+        .text-muted {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <h1>Service<span>Hub</span></h1>
+            </div>
+
+            
+
+            <nav>
+                <a href="{{ url_for('customer_dashboard') }}">Home</a>
+                <a href="{{ url_for('customer_profile') }}">Profile</a>
+                <a href="{{ url_for('services') }}">Services</a>
+                <a href="{{ url_for('create_service_request') }}">Request</a>
+                <a href="{{ url_for('booking_history') }}">History</a>
+                <a href="{{ url_for('view_cart') }}" class="active">Cart</a>
+                <a href="{{ url_for('request_summary') }}">Summary</a>
+                <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2>
+                <i class="fas fa-shopping-cart"></i> Your Cart
+            </h2>
+            <span class="count-badge">{{ cart_items|length }} items</span>
+        </div>
+
+        <!-- Cart Table -->
+        <div class="table-card">
+            {% if cart_items %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th style="text-align:center;">Quantity</th>
+                            <th>Price/hr</th>
+                            <th>Total</th>
+                            <th>Time</th>
+                            <th style="text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                            <tr>
+                                <td><span class="fw-semibold">{{ item.service_name }}</span></td>
+                                <td>
+                                    <div class="qty-control" style="margin:0 auto; width:fit-content;">
+                                        <a href="{{ url_for('decrease_quantity', item_id=item.id) }}" class="qty-btn">
+                                            <i class="fas fa-minus"></i>
+                                        </a>
+                                        <input type="text" class="qty-input" value="{{ item.quantity }}" readonly />
+                                        <a href="{{ url_for('increase_quantity', item_id=item.id) }}" class="qty-btn">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>₹{{ item.price }}</td>
+                                <td><span class="fw-semibold">₹{{ item.total }}</span></td>
+                                <td>{{ item.time_required }} hrs</td>
+                                <td>
+                                    <a href="{{ url_for('remove_item', item_id=item.id) }}" 
+                                       class="btn-action btn-remove"
+                                       onclick="return confirm('Remove this item from your cart?');">
+                                        <i class="fas fa-trash-alt"></i> Remove
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-shopping-bag"></i>
+                    <p>Your cart is empty</p>
+                    <p class="sub-text">Browse our services and add items to get started</p>
+                    <a href="{{ url_for('services') }}" class="btn-browse" style="margin-top:1rem; display:inline-block;">
+                        <i class="fas fa-search"></i> Browse Services
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Summary & Checkout -->
+        {% if cart_items %}
+            <div class="summary-row">
+                <div class="summary-item">
+                    <span class="label"><i class="far fa-clock" style="color:#c9a84c;"></i> Total Time:</span>
+                    <span class="value gold">{{ total_time }} hours</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label"><i class="fas fa-tag" style="color:#c9a84c;"></i> Total:</span>
+                    <span class="value green">₹{{ total_price }}</span>
+                </div>
+            </div>
+
+            <div class="checkout-section">
+                <a href="{{ url_for('checkout') }}" class="btn-checkout">
+                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

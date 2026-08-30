@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Professionals</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- global reset & theme (matches other pages) ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f9;
+            color: #1e293b;
+            padding: 0 0 2rem 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ----- HEADER (shared) ----- */
+        header {
+            background: #0b2a4a;
+            color: white;
+            width: 100%;
+            padding: 1.2rem 2rem 1rem 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-bottom: 2px solid #ffd966;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-content h1 i {
+            color: #ffd966;
+            font-size: 1.8rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.6rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f0f7ff;
+            font-weight: 500;
+            padding: 0.45rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.06);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav a i {
+            font-size: 0.85rem;
+            color: #ffd966;
+        }
+
+        nav a:hover {
+            background: #ffd966;
+            color: #0b2a4a;
+            border-color: #ffd966;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 14px rgba(255, 215, 0, 0.2);
+        }
+        nav a:hover i {
+            color: #0b2a4a;
+        }
+
+        .logout-link {
+            background: rgba(255, 70, 70, 0.12) !important;
+            border-color: #b91c1c40 !important;
+        }
+        .logout-link:hover {
+            background: #b91c1c !important;
+            color: white !important;
+            border-color: #b91c1c !important;
+        }
+        .logout-link:hover i {
+            color: white !important;
+        }
+
+        /* ----- page title ----- */
+        .page-title {
+            max-width: 1400px;
+            width: 95%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+        .page-title h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #0b2a4a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-title h2 i {
+            color: #f59e0b;
+        }
+        .page-title .count-badge {
+            background: #eef2f6;
+            padding: 0.25rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        /* ----- table card ----- */
+        .table-card {
+            max-width: 1400px;
+            width: 95%;
+            background: white;
+            border-radius: 24px;
+            padding: 1.8rem 1.5rem 2rem 1.5rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid #ffffff60;
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .table-card th {
+            text-align: left;
+            padding: 0.9rem 0.7rem 0.7rem 0.7rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #64748b;
+            border-bottom: 2px solid #e9edf2;
+            white-space: nowrap;
+        }
+
+        .table-card td {
+            padding: 0.9rem 0.7rem;
+            border-bottom: 1px solid #eef2f6;
+            vertical-align: middle;
+        }
+
+        .table-card tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-card tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .table-card .empty-row td {
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 2.5rem 0.8rem;
+        }
+
+        /* ----- status badges ----- */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status-blocked {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ----- action buttons ----- */
+        .action-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn-block {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+        .btn-block:hover {
+            background: #b91c1c;
+            color: white;
+            border-color: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        .btn-unblock {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+        .btn-unblock:hover {
+            background: #166534;
+            color: white;
+            border-color: #166534;
+            transform: translateY(-1px);
+        }
+
+        .btn-view {
+            background: #eef2ff;
+            color: #4338ca;
+            border-color: #c7d2fe;
+        }
+        .btn-view:hover {
+            background: #4338ca;
+            color: white;
+            border-color: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        /* ----- footer ----- */
+        .footer-note {
+            max-width: 1400px;
+            width: 95%;
+            margin-top: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* ----- responsive ----- */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: center;
+            }
+            .header-content h1 {
+                font-size: 1.6rem;
+            }
+            nav a {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.6rem;
+            }
+            .table-card {
+                padding: 1rem 0.5rem;
+            }
+            .table-card th,
+            .table-card td {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.78rem;
+            }
+            .action-group {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .btn-action {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .table-card th,
+            .table-card td {
+                font-size: 0.7rem;
+                padding: 0.5rem 0.3rem;
+            }
+            .page-title h2 {
+                font-size: 1.2rem;
+            }
+            .status-badge {
+                font-size: 0.65rem;
+                padding: 0.1rem 0.5rem;
+            }
+        }
+
+        /* small helper */
+        .text-muted {
+            color: #94a3b8;
+        }
+        .fw-semibold {
+            font-weight: 600;
+        }
+        .truncate {
+            max-width: 120px;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-user-tie"></i>
+                Professionals
+            </h1>
+            <nav>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('lservices') }}"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="{{ url_for('admin_service_requests') }}"><i class="fas fa-clipboard-list"></i> Requests</a>
+                <a href="{{ url_for('joining_requests') }}"><i class="fas fa-user-plus"></i> Joining</a>
+                <a href="{{ url_for('feedbacks') }}"><i class="fas fa-star"></i> Feedbacks</a>
+                <a href="{{ url_for('bookings') }}"><i class="fas fa-calendar-check"></i> Bookings</a>
+                <a href="{{ url_for('admin_summary') }}"><i class="fas fa-chart-pie"></i> Summary</a>
+                <a href="{{ url_for('logout') }}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== PAGE TITLE ========== -->
+    <div class="page-title">
+        <h2>
+            <i class="fas fa-users"></i> Approved Professionals
+            <span class="count-badge">{{ professionals|length }} total</span>
+        </h2>
+        <span style="color:#64748b; font-size:0.9rem;">
+            <i class="fas fa-circle" style="color:#22c55e; font-size:0.6rem;"></i> Active
+            <i class="fas fa-circle" style="color:#ef4444; font-size:0.6rem; margin-left:12px;"></i> Blocked
+        </span>
+    </div>
+
+    <!-- ========== TABLE CARD ========== -->
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Service</th>
+                    <th>Experience</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for professional in professionals %}
+                <tr>
+                    <td><span class="fw-semibold">{{ professional.name }}</span></td>
+                    <td>{{ professional.email }}</td>
+                    <td>
+                        <span class="status-badge" style="background:#eef2ff; color:#4338ca;">
+                            {{ professional.service_type or 'N/A' }}
+                        </span>
+                    </td>
+                    <td>{{ professional.experience or '—' }} yrs</td>
+                    <td>
+                        <span title="{{ professional.address }}, {{ professional.pincode }}">
+                            <i class="fas fa-map-pin" style="color:#94a3b8;"></i>
+                            {{ professional.pincode or '—' }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if professional.blocked %}
+                            <span class="status-badge status-blocked">
+                                <i class="fas fa-ban"></i> Blocked
+                            </span>
+                        {% else %}
+                            <span class="status-badge status-active">
+                                <i class="fas fa-check-circle"></i> Active
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-group">
+                            {% if not professional.blocked %}
+                                <a href="{{ url_for('block_professional', professional_id=professional.id) }}"
+                                   class="btn-action btn-block"
+                                   onclick="return confirm('Block {{ professional.name }}? They will not be able to accept new requests.');">
+                                    <i class="fas fa-ban"></i> Block
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('unblock_professional', professional_id=professional.id) }}"
+                                   class="btn-action btn-unblock"
+                                   onclick="return confirm('Unblock {{ professional.name }}? They will be able to accept requests again.');">
+                                    <i class="fas fa-check"></i> Unblock
+                                </a>
+                            {% endif %}
+                            <!-- optional view details button -->
+                            <a href="#" class="btn-action btn-view" title="View details">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr class="empty-row">
+                    <td colspan="7">
+                        <i class="fas fa-user-slash" style="margin-right: 8px;"></i> No approved professionals yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <div class="footer-note">
+        <span><i class="far fa-calendar-alt"></i> &copy; 2024 Household Services</span>
+        <span>
+            <i class="fas fa-user-check"></i> {{ professionals|selectattr('blocked', 'equalto', False)|list|length }} active ·
+            {{ professionals|selectattr('blocked', 'equalto', True)|list|length }} blocked
+        </span>
+    </div>
+
+</body>
+</html>

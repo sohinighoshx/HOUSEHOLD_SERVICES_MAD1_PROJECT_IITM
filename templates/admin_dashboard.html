@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Create Service</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- global reset & theme (matches summary) ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f9;
+            color: #1e293b;
+            padding: 0 0 2rem 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ----- HEADER (shared) ----- */
+        header {
+            background: #0b2a4a; /* deep navy */
+            color: white;
+            width: 100%;
+            padding: 1.2rem 2rem 1rem 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-bottom: 2px solid #ffd966;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-content h1 i {
+            color: #ffd966;
+            font-size: 1.8rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.6rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f0f7ff;
+            font-weight: 500;
+            padding: 0.45rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.06);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav a i {
+            font-size: 0.85rem;
+            color: #ffd966;
+        }
+
+        nav a:hover {
+            background: #ffd966;
+            color: #0b2a4a;
+            border-color: #ffd966;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 14px rgba(255, 215, 0, 0.2);
+        }
+        nav a:hover i {
+            color: #0b2a4a;
+        }
+
+        /* logout link special */
+        .logout-link {
+            background: rgba(255, 70, 70, 0.12) !important;
+            border-color: #b91c1c40 !important;
+        }
+        .logout-link:hover {
+            background: #b91c1c !important;
+            color: white !important;
+            border-color: #b91c1c !important;
+        }
+        .logout-link:hover i {
+            color: white !important;
+        }
+
+        /* ----- main card (form) ----- */
+        .main-card {
+            max-width: 780px;
+            width: 95%;
+            background: white;
+            border-radius: 28px;
+            padding: 2.2rem 2.5rem 2.8rem 2.5rem;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid #ffffff60;
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+            margin: 0.5rem auto 2rem auto;
+        }
+
+        .main-card:hover {
+            box-shadow: 0 24px 50px rgba(0, 20, 40, 0.10);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #eef2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #0b2a4a;
+            letter-spacing: -0.3px;
+        }
+
+        .card-header i {
+            font-size: 2rem;
+            color: #f59e0b;
+            background: #fef3c7;
+            padding: 10px;
+            border-radius: 16px;
+        }
+
+        /* flash messages */
+        .flash-messages {
+            width: 95%;
+            max-width: 780px;
+            margin: 0 auto 0.8rem auto;
+        }
+        .flash {
+            padding: 0.8rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 0.4rem;
+            border-left: 6px solid;
+        }
+        .flash.success {
+            border-left-color: #22c55e;
+            color: #14532d;
+        }
+        .flash.error {
+            border-left-color: #ef4444;
+            color: #7f1d1d;
+        }
+        .flash.info {
+            border-left-color: #3b82f6;
+            color: #1e3a8a;
+        }
+
+        /* ----- form styling ----- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+            color: #1e293b;
+            letter-spacing: -0.2px;
+        }
+
+        .form-group label i {
+            color: #f59e0b;
+            width: 1.4rem;
+            margin-right: 4px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #0b2a4a;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(11, 42, 74, 0.08);
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #0b2a4a;
+            color: white;
+            padding: 0.85rem 2.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(11, 42, 74, 0.2);
+            margin-top: 0.5rem;
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        .btn:hover {
+            background: #1a3f64;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(11, 42, 74, 0.25);
+        }
+
+        .btn:active {
+            transform: translateY(0px);
+        }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: center;
+            }
+            .header-content h1 {
+                font-size: 1.6rem;
+            }
+            nav a {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.7rem;
+            }
+            .main-card {
+                padding: 1.5rem 1.2rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .card-header h2 {
+                font-size: 1.3rem;
+            }
+            .card-header i {
+                font-size: 1.4rem;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-card {
+                padding: 1.2rem 0.8rem;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* subtle helper */
+        .required-star {
+            color: #dc2626;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== FLASH MESSAGES ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-gauge-high"></i>
+                Admin Dashboard
+            </h1>
+            <nav>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('lservices') }}"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="{{ url_for('list_of_professionals') }}"><i class="fas fa-user-tie"></i> Professionals</a>
+                <a href="{{ url_for('admin_service_requests') }}"><i class="fas fa-clipboard-list"></i> Requests</a>
+                <a href="{{ url_for('joining_requests') }}"><i class="fas fa-user-plus"></i> Joining</a>
+                <a href="{{ url_for('feedbacks') }}"><i class="fas fa-star"></i> Feedbacks</a>
+                <a href="{{ url_for('bookings') }}"><i class="fas fa-calendar-check"></i> Bookings</a>
+                <a href="{{ url_for('admin_summary') }}"><i class="fas fa-chart-pie"></i> Summary</a>
+                <a href="{{ url_for('logout') }}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== MAIN FORM CARD ========== -->
+    <div class="main-card">
+        <div class="card-header">
+            <i class="fas fa-plus-circle"></i>
+            <h2>Create a New Service Category</h2>
+        </div>
+
+        <form action="{{ url_for('add_service') }}" method="POST">
+            <div class="form-group">
+                <label for="service-name">
+                    <i class="fas fa-tag"></i> Service Name <span class="required-star">*</span>
+                </label>
+                <input type="text" id="service-name" name="service_name" placeholder="e.g. Home Cleaning, Plumbing" required />
+            </div>
+
+            <div class="form-group">
+                <label for="description">
+                    <i class="fas fa-align-left"></i> Description <span class="required-star">*</span>
+                </label>
+                <textarea id="description" name="description" rows="3" placeholder="Brief description of the service..." required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">
+                        <i class="fas fa-dollar-sign"></i> Price (per hour) <span class="required-star">*</span>
+                    </label>
+                    <input type="number" id="price" name="price" step="0.01" placeholder="0.00" required />
+                </div>
+                <div class="form-group">
+                    <label for="time-required">
+                        <i class="fas fa-clock"></i> Time Required (hours) <span class="required-star">*</span>
+                    </label>
+                    <input type="number" id="time-required" name="time_required" placeholder="e.g. 2" required />
+                </div>
+            </div>
+
+            <button type="submit" class="btn">
+                <i class="fas fa-save"></i> Add Service
+            </button>
+        </form>
+    </div>
+
+    <!-- small extra note (optional) -->
+    <div style="max-width:780px; width:95%; margin-top:0.2rem; color:#64748b; font-size:0.85rem; display:flex; justify-content:flex-end; gap:1.2rem; flex-wrap:wrap;">
+        <span><i class="fas fa-asterisk" style="color:#dc2626; font-size:0.6rem;"></i> Required fields</span>
+        <span><i class="fas fa-arrow-right"></i> All services will appear in the Services list</span>
+    </div>
+
+</body>
+</html>

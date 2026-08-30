@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Summary · ServiceHub</title>
+
+    <!-- Link to Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fdf6f0;
+            color: #2d1f14;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #1a0e0a;
+            color: #f5ede6;
+            width: 100%;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid #d4a373;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 1.4rem;
+            color: #d4a373;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #f5ede6;
+        }
+
+        .logo span {
+            color: #d4a373;
+            font-weight: 300;
+        }
+
+        .user-greeting {
+            font-size: 0.8rem;
+            color: #d4c5b8;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-greeting i {
+            color: #d4a373;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem 0.4rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #d4c5b8;
+            font-weight: 500;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #f5ede6;
+            background: rgba(212, 163, 115, 0.15);
+            border-color: rgba(212, 163, 115, 0.3);
+        }
+
+        nav a.active {
+            color: #d4a373;
+            background: rgba(212, 163, 115, 0.1);
+            border-color: rgba(212, 163, 115, 0.2);
+        }
+
+        .nav-logout {
+            color: #e8c8b8 !important;
+        }
+        .nav-logout:hover {
+            color: #e88a7a !important;
+            border-color: rgba(232, 138, 122, 0.3) !important;
+            background: rgba(232, 138, 122, 0.1) !important;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1200px;
+            width: 95%;
+            margin: 1.5rem auto 2rem;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d1f14;
+            letter-spacing: -0.3px;
+        }
+
+        .page-header h2 i {
+            color: #d4a373;
+            margin-right: 0.5rem;
+        }
+
+        .page-header p {
+            color: #8a7a6a;
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+        }
+
+        /* ===== STATS ROW ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-box {
+            background: #fffbf8;
+            border-radius: 12px;
+            padding: 0.8rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0e4d8;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .stat-box .stat-icon {
+            font-size: 1.2rem;
+            color: #d4a373;
+            background: #fdf0e0;
+            padding: 0.4rem;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .stat-box .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-box .stat-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d1f14;
+            line-height: 1.2;
+        }
+
+        .stat-box .stat-label {
+            font-size: 0.6rem;
+            color: #8a7a6a;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .stat-box .stat-number.green {
+            color: #4a7a5a;
+        }
+        .stat-box .stat-number.orange {
+            color: #b87a4a;
+        }
+        .stat-box .stat-number.red {
+            color: #b84a3a;
+        }
+        .stat-box .stat-number.blue {
+            color: #6a8a9a;
+        }
+
+        /* ===== CHART CARD ===== */
+        .chart-card {
+            background: #fffbf8;
+            border-radius: 16px;
+            padding: 1.5rem 1.8rem 2rem 1.8rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0e4d8;
+        }
+
+        .chart-card .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .chart-card .chart-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d1f14;
+        }
+
+        .chart-card .chart-header h3 i {
+            color: #d4a373;
+            margin-right: 0.5rem;
+        }
+
+        .chart-card .chart-header .chart-badge {
+            background: #f5ede6;
+            padding: 0.15rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #8a7a6a;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .chart-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            .logo {
+                justify-content: center;
+            }
+            nav {
+                justify-content: center;
+            }
+            .user-greeting {
+                text-align: center;
+            }
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-header h2 {
+                font-size: 1.1rem;
+            }
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+            .stat-box {
+                padding: 0.6rem 1rem;
+            }
+            .chart-card {
+                padding: 1rem 1rem 1.5rem 1rem;
+            }
+            .chart-wrapper {
+                height: 220px;
+            }
+        }
+
+        .text-muted {
+            color: #b8a89a;
+        }
+        .fw-semibold {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <h1>Service<span>Hub</span></h1>
+            </div>
+
+            <div class="user-greeting">
+                <i class="fas fa-user-circle" style="margin-right: 4px;"></i>
+                Welcome back
+            </div>
+
+            <nav>
+                <a href="{{ url_for('professional_dashboard') }}">Home</a>
+                <a href="{{ url_for('professional_profile') }}">Profile</a>
+                <a href="{{ url_for('service_history') }}">History</a>
+                <a href="{{ url_for('professional_summary') }}" class="active">Summary</a>
+                <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2>
+                <i class="fas fa-chart-bar"></i> Request Summary
+            </h2>
+            <p>Overview of all your service requests and their current status</p>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-file-signature"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number blue">{{ total_requests }}</span>
+                    <span class="stat-label">Total Requests</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number green">{{ completed_requests }}</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number orange">{{ pending_requests }}</span>
+                    <span class="stat-label">Pending</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number red">{{ cancelled_requests }}</span>
+                    <span class="stat-label">Cancelled</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>
+                    <i class="fas fa-chart-simple"></i> Request Distribution
+                </h3>
+                <span class="chart-badge">
+                    <i class="fas fa-calendar-alt"></i> All Time
+                </span>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="requestChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CHART SCRIPT ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('requestChart').getContext('2d');
+
+            const total = parseInt('{{ total_requests }}') || 0;
+            const completed = parseInt('{{ completed_requests }}') || 0;
+            const pending = parseInt('{{ pending_requests }}') || 0;
+            const cancelled = parseInt('{{ cancelled_requests }}') || 0;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Total', 'Completed', 'Pending', 'Cancelled'],
+                    datasets: [{
+                        label: 'Requests',
+                        data: [total, completed, pending, cancelled],
+                        backgroundColor: [
+                            'rgba(106, 138, 154, 0.7)',
+                            'rgba(74, 122, 90, 0.7)',
+                            'rgba(184, 122, 74, 0.7)',
+                            'rgba(184, 74, 58, 0.7)'
+                        ],
+                        borderColor: [
+                            '#6a8a9a',
+                            '#4a7a5a',
+                            '#b87a4a',
+                            '#b84a3a'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 6,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' request(s)';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            },
+                            grid: {
+                                color: '#f5ede6'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

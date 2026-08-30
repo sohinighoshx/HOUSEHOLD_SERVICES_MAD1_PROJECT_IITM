@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Dashboard · ServiceHub</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fdf6f0;
+            color: #2d1f14;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #1a0e0a;
+            color: #f5ede6;
+            width: 100%;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid #d4a373;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 1.4rem;
+            color: #d4a373;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #f5ede6;
+        }
+
+        .logo span {
+            color: #d4a373;
+            font-weight: 300;
+        }
+
+        .user-greeting {
+            font-size: 0.8rem;
+            color: #d4c5b8;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-greeting i {
+            color: #d4a373;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem 0.4rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #d4c5b8;
+            font-weight: 500;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #f5ede6;
+            background: rgba(212, 163, 115, 0.15);
+            border-color: rgba(212, 163, 115, 0.3);
+        }
+
+        nav a.active {
+            color: #d4a373;
+            background: rgba(212, 163, 115, 0.1);
+            border-color: rgba(212, 163, 115, 0.2);
+        }
+
+        .nav-logout {
+            color: #e8c8b8 !important;
+        }
+        .nav-logout:hover {
+            color: #e88a7a !important;
+            border-color: rgba(232, 138, 122, 0.3) !important;
+            background: rgba(232, 138, 122, 0.1) !important;
+        }
+
+        /* ===== WELCOME BANNER ===== */
+        .welcome-banner {
+            background: linear-gradient(135deg, #2d1a0e 0%, #4a2c1a 50%, #5a3a28 100%);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            color: #f5ede6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(45, 26, 14, 0.15);
+        }
+
+        .welcome-banner .welcome-text h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .welcome-banner .welcome-text h2 .highlight {
+            color: #d4a373;
+        }
+
+        .welcome-banner .welcome-text p {
+            color: #d4c5b8;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .welcome-banner .welcome-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .welcome-banner .welcome-stats .stat-item {
+            text-align: center;
+        }
+
+        .welcome-banner .welcome-stats .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d4a373;
+        }
+
+        .welcome-banner .welcome-stats .stat-item .label {
+            font-size: 0.6rem;
+            color: #b8a89a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1.5rem auto 2rem;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d1f14;
+            letter-spacing: -0.3px;
+        }
+
+        .page-header h2 i {
+            color: #d4a373;
+            margin-right: 0.5rem;
+        }
+
+        .page-header .count-badge {
+            background: #f0e4d8;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #4a2c1a;
+        }
+
+        /* ===== TABLE CARD ===== */
+        .table-card {
+            background: #fffbf8;
+            border-radius: 16px;
+            padding: 1.2rem 1.2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0e4d8;
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .table-card th {
+            text-align: left;
+            padding: 0.6rem 0.6rem 0.5rem 0.6rem;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #8a7a6a;
+            border-bottom: 2px solid #f0e4d8;
+            white-space: nowrap;
+        }
+
+        .table-card td {
+            padding: 0.6rem 0.6rem;
+            border-bottom: 1px solid #f5ede6;
+            vertical-align: middle;
+            color: #2d1f14;
+        }
+
+        .table-card tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-card tr:hover td {
+            background-color: #fdf6f0;
+        }
+
+        .table-card .empty-row td {
+            text-align: center;
+            color: #b8a89a;
+            font-style: italic;
+            padding: 2rem 0.8rem;
+        }
+
+        /* ===== STATUS BADGE ===== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.12rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.68rem;
+            font-weight: 600;
+        }
+        .status-pending {
+            background: #fdf0e0;
+            color: #b87a4a;
+        }
+        .status-confirmed {
+            background: #e8f0e8;
+            color: #4a7a5a;
+        }
+        .status-completed {
+            background: #dce8e0;
+            color: #2a6a4a;
+        }
+        .status-cancelled {
+            background: #f5e4e0;
+            color: #b84a3a;
+        }
+        .status-default {
+            background: #f0ece6;
+            color: #8a7a6a;
+        }
+
+        /* ===== BUTTONS ===== */
+        .action-group {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-confirm {
+            background: #e8f0e8;
+            color: #3a7a4a;
+            border: 1px solid #c8e0c8;
+        }
+        .btn-confirm:hover {
+            background: #3a7a4a;
+            color: white;
+            border-color: #3a7a4a;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            background: #f5e4e0;
+            color: #b84a3a;
+            border: 1px solid #f0d0c8;
+        }
+        .btn-cancel:hover {
+            background: #b84a3a;
+            color: white;
+            border-color: #b84a3a;
+            transform: translateY(-1px);
+        }
+
+        .btn-view {
+            background: #f0ece6;
+            color: #6a5a4a;
+            border: 1px solid #e0d8d0;
+        }
+        .btn-view:hover {
+            background: #6a5a4a;
+            color: white;
+            border-color: #6a5a4a;
+            transform: translateY(-1px);
+        }
+
+        .btn-complete {
+            background: #dce8e0;
+            color: #2a6a4a;
+            border: 1px solid #c0d8c8;
+        }
+        .btn-complete:hover {
+            background: #2a6a4a;
+            color: white;
+            border-color: #2a6a4a;
+            transform: translateY(-1px);
+        }
+
+        .btn-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #b8a89a;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            color: #d4c5b8;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            color: #8a7a6a;
+        }
+
+        .empty-state .sub-text {
+            font-size: 0.8rem;
+            color: #b8a89a;
+            margin-top: 2px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            .logo {
+                justify-content: center;
+            }
+            nav {
+                justify-content: center;
+            }
+            .user-greeting {
+                text-align: center;
+            }
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.2rem;
+            }
+            .welcome-banner .welcome-stats {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .page-header h2 {
+                font-size: 1.1rem;
+            }
+            .welcome-banner .welcome-stats {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            .welcome-banner .welcome-stats .stat-item .number {
+                font-size: 1.2rem;
+            }
+            .table-card {
+                padding: 0.8rem;
+            }
+            .table-card th,
+            .table-card td {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.3rem;
+            }
+            .action-group {
+                flex-direction: column;
+                gap: 3px;
+            }
+            .btn-action {
+                font-size: 0.65rem;
+                padding: 0.15rem 0.5rem;
+            }
+        }
+
+        .fw-semibold {
+            font-weight: 600;
+        }
+        .text-muted {
+            color: #b8a89a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <h1>Service<span>Hub</span></h1>
+            </div>
+
+
+
+            <nav>
+                <a href="{{ url_for('professional_dashboard') }}" class="active">Home</a>
+                <a href="{{ url_for('professional_profile') }}">Profile</a>
+                <a href="{{ url_for('service_history') }}">History</a>
+                <a href="{{ url_for('professional_summary') }}">Summary</a>
+                <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div class="welcome-text">
+                <h2>Hello, <span class="highlight">{{ username }}</span> 👋</h2>
+                <p>You have <strong>{{ service_requests|length }}</strong> service request(s) waiting for your attention</p>
+            </div>
+            <div class="welcome-stats">
+                <div class="stat-item">
+                    <div class="number">{{ service_requests|length }}</div>
+                    <div class="label">Total Requests</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">
+                        {% set pending = 0 %}
+                        {% for req in service_requests %}
+                            {% if req.status|lower == 'pending' %}
+                                {% set pending = pending + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ pending }}
+                    </div>
+                    <div class="label">Pending</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">
+                        {% set confirmed = 0 %}
+                        {% for req in service_requests %}
+                            {% if req.status|lower == 'confirmed' %}
+                                {% set confirmed = confirmed + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ confirmed }}
+                    </div>
+                    <div class="label">Confirmed</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2>
+                <i class="fas fa-clipboard-list"></i> Service Requests
+            </h2>
+            <span class="count-badge">{{ service_requests|length }} requests</span>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+            {% if service_requests %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Service</th>
+                            <th>Pincode</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in service_requests %}
+                        <tr>
+                            <td><span class="fw-semibold">#{{ request.id }}</span></td>
+                            <td style="font-size:0.8rem; color:#8a7a6a;">{{ request.date_of_request }}</td>
+                            <td>{{ request.service.name }}</td>
+                            <td>{{ request.pincode }}</td>
+                            <td>
+                                <span class="status-badge 
+                                    {% if request.status|lower == 'pending' %}status-pending
+                                    {% elif request.status|lower == 'confirmed' %}status-confirmed
+                                    {% elif request.status|lower == 'completed' %}status-completed
+                                    {% elif request.status|lower == 'cancelled' %}status-cancelled
+                                    {% else %}status-default{% endif %}">
+                                    <i class="fas 
+                                        {% if request.status|lower == 'pending' %}fa-clock
+                                        {% elif request.status|lower == 'confirmed' %}fa-check-circle
+                                        {% elif request.status|lower == 'completed' %}fa-check-double
+                                        {% elif request.status|lower == 'cancelled' %}fa-times-circle
+                                        {% else %}fa-circle{% endif %}"></i>
+                                    {{ request.status|capitalize }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-group">
+                                    {% if request.status|lower == 'pending' %}
+                                        <form action="{{ url_for('update_request', action='confirm', request_id=request.id) }}" method="POST" style="display:inline;">
+                                            <button class="btn-action btn-confirm" type="submit">
+                                                <i class="fas fa-check"></i> Confirm
+                                            </button>
+                                        </form>
+                                        <form action="{{ url_for('update_request', action='cancel', request_id=request.id) }}" method="POST" style="display:inline;">
+                                            <button class="btn-action btn-cancel" type="submit">
+                                                <i class="fas fa-times"></i> Cancel
+                                            </button>
+                                        </form>
+                                    {% elif request.status|lower == 'confirmed' %}
+                                        <form action="{{ url_for('update_request', action='complete', request_id=request.id) }}" method="POST" style="display:inline;">
+                                            <button class="btn-action btn-complete" type="submit">
+                                                <i class="fas fa-check-double"></i> Complete
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                    <form action="{{ url_for('view_service_request', request_id=request.id) }}" method="GET" style="display:inline;">
+                                        <button class="btn-action btn-view" type="submit">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No service requests available</p>
+                    <p class="sub-text">New requests will appear here when assigned to you</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

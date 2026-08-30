@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account · ServiceHub</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f4f7fc;
+            padding: 1.5rem;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem 2.2rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eef2f6;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .brand .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: #0a1e2f;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand .logo i {
+            color: #c9a84c;
+            font-size: 1.6rem;
+        }
+
+        .brand .logo span {
+            color: #c9a84c;
+            font-weight: 300;
+        }
+
+        .brand h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0a1e2f;
+            margin-top: 0.5rem;
+            letter-spacing: -0.3px;
+        }
+
+        .brand p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1a2332;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .form-group label i {
+            color: #c9a84c;
+            width: 1.2rem;
+            margin-right: 4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8fafc;
+            transition: all 0.2s;
+            font-family: inherit;
+            color: #1a2332;
+        }
+
+        .form-group input:focus {
+            border-color: #0a1e2f;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 30, 47, 0.08);
+            background: white;
+        }
+
+        .form-group input::placeholder {
+            color: #b8c9e0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-submit {
+            width: 100%;
+            padding: 0.8rem;
+            background: #0a1e2f;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            background: #1a3a5c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 30, 47, 0.15);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* ===== FOOTER ===== */
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .login-link a {
+            color: #0a1e2f;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover {
+            color: #c9a84c;
+            text-decoration: underline;
+        }
+
+        .login-link i {
+            color: #c9a84c;
+            margin-right: 4px;
+        }
+
+        /* ===== FLASH MESSAGES ===== */
+        .flash-messages {
+            margin-bottom: 1rem;
+        }
+
+        .flash {
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            margin-bottom: 0.4rem;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .flash.success {
+            border-left-color: #22c55e;
+            color: #14532d;
+        }
+        .flash.error {
+            border-left-color: #ef4444;
+            color: #7f1d1d;
+        }
+        .flash.info {
+            border-left-color: #3b82f6;
+            color: #1e3a8a;
+        }
+        .flash.warning {
+            border-left-color: #f59e0b;
+            color: #78350f;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 500px) {
+            .register-card {
+                padding: 1.8rem 1.2rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .brand h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ===== REQUIRED STAR ===== */
+        .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+
+        <!-- ===== FLASH MESSAGES ===== -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% elif category == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- ===== REGISTER CARD ===== -->
+        <div class="register-card">
+
+            <!-- Brand -->
+            <div class="brand">
+                <a href="#" class="logo">
+                    <i class="fas fa-briefcase"></i>
+                    Service<span>Hub</span>
+                </a>
+                <h2>Create Account</h2>
+                <p>Join us and start booking services today</p>
+            </div>
+
+            <!-- Form -->
+            <form method="POST">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i> Full Name <span class="required">*</span>
+                    </label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-id-badge"></i> Username <span class="required">*</span>
+                    </label>
+                    <input type="text" id="username" name="username" placeholder="Choose a unique username" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address <span class="required">*</span>
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password <span class="required">*</span>
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="address">
+                        <i class="fas fa-map-pin"></i> Address <span class="required">*</span>
+                    </label>
+                    <input type="text" id="address" name="address" placeholder="Your street address" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="pincode">
+                        <i class="fas fa-mailbox"></i> Pincode <span class="required">*</span>
+                    </label>
+                    <input type="text" id="pincode" name="pincode" placeholder="Enter your area pincode" required />
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="login-link">
+                <i class="fas fa-arrow-right"></i>
+                Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

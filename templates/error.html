@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Invalid Input | ServiceHub</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    >
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                'Inter',
+                -apple-system,
+                BlinkMacSystemFont,
+                'Segoe UI',
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f7fc 0%,
+                    #eef3f8 100%
+                );
+
+            color: #1a2332;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        /* =====================================================
+           MAIN CARD
+        ===================================================== */
+
+        .message-container {
+            width: 100%;
+            max-width: 520px;
+
+            background: #ffffff;
+
+            border-radius: 18px;
+
+            padding: 2.5rem 2.2rem;
+
+            text-align: center;
+
+            border: 1px solid #e7edf3;
+
+            box-shadow:
+                0 15px 40px rgba(10, 30, 47, 0.09);
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Gold top border */
+
+        .message-container::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 4px;
+
+            background: #c9a84c;
+        }
+
+
+        /* =====================================================
+           ICON
+        ===================================================== */
+
+        .error-icon {
+            width: 72px;
+            height: 72px;
+
+            margin: 0 auto 1.2rem;
+
+            border-radius: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #fff5f5;
+
+            border: 1px solid #f4d4d4;
+
+            color: #c0392b;
+
+            font-size: 1.8rem;
+        }
+
+
+        /* =====================================================
+           TEXT
+        ===================================================== */
+
+        .message-container h1 {
+            color: #0a1e2f;
+
+            font-size: 1.65rem;
+
+            font-weight: 650;
+
+            letter-spacing: -0.3px;
+
+            margin-bottom: 0.55rem;
+        }
+
+        .message-container h1 span {
+            color: #c0392b;
+        }
+
+        .message-container p {
+            color: #64748b;
+
+            font-size: 0.88rem;
+
+            line-height: 1.55;
+
+            max-width: 390px;
+
+            margin: 0 auto 1.8rem;
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .actions {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 0.65rem;
+        }
+
+        .action {
+            width: 100%;
+
+            padding: 0.75rem 1rem;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-size: 0.82rem;
+
+            font-weight: 600;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 9px;
+
+            transition: all 0.2s ease;
+
+            border: 1px solid transparent;
+        }
+
+        .action i {
+            font-size: 0.85rem;
+        }
+
+
+        /* Customer */
+
+        .customer-btn {
+            background: #0a1e2f;
+
+            color: #ffffff;
+        }
+
+        .customer-btn i {
+            color: #c9a84c;
+        }
+
+        .customer-btn:hover {
+            background: #173b5c;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 6px 16px rgba(10, 30, 47, 0.16);
+        }
+
+
+        /* Professional */
+
+        .professional-btn {
+            background: #f7f2e4;
+
+            color: #0a1e2f;
+
+            border-color: #e7d8aa;
+        }
+
+        .professional-btn i {
+            color: #c9a84c;
+        }
+
+        .professional-btn:hover {
+            background: #efe6cd;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* Home */
+
+        .home-btn {
+            background: #ffffff;
+
+            color: #526174;
+
+            border-color: #dfe6ee;
+        }
+
+        .home-btn i {
+            color: #0a1e2f;
+        }
+
+        .home-btn:hover {
+            background: #f5f8fb;
+
+            color: #0a1e2f;
+
+            border-color: #cbd5e1;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .help-text {
+            margin-top: 1.5rem;
+
+            padding-top: 1rem;
+
+            border-top: 1px solid #eef2f6;
+
+            color: #94a3b8;
+
+            font-size: 0.72rem;
+        }
+
+        .help-text i {
+            color: #c9a84c;
+
+            margin-right: 4px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .message-container {
+                padding: 2rem 1.4rem;
+
+                border-radius: 15px;
+            }
+
+            .error-icon {
+                width: 62px;
+                height: 62px;
+
+                border-radius: 17px;
+
+                font-size: 1.5rem;
+            }
+
+            .message-container h1 {
+                font-size: 1.4rem;
+            }
+
+            .message-container p {
+                font-size: 0.82rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="message-container">
+
+        <!-- Error Icon -->
+
+        <div class="error-icon">
+            <i class="fas fa-triangle-exclamation"></i>
+        </div>
+
+
+        <!-- Message -->
+
+        <h1>
+            <span>Invalid Input</span>
+        </h1>
+
+        <p>
+            Something went wrong with the information you provided.
+            Please choose an option below to continue.
+        </p>
+
+
+        <!-- Actions -->
+
+        <div class="actions">
+
+            <a
+                href="/c_register"
+                class="action customer-btn"
+            >
+                <i class="fas fa-user"></i>
+                Create a Customer Account
+            </a>
+
+
+            <a
+                href="/p_register"
+                class="action professional-btn"
+            >
+                <i class="fas fa-user-tie"></i>
+                Register as a Service Professional
+            </a>
+
+
+            <a
+                href="/index"
+                class="action home-btn"
+            >
+                <i class="fas fa-arrow-left"></i>
+                Return to Home
+            </a>
+
+        </div>
+
+
+        <!-- Footer -->
+
+        <div class="help-text">
+
+            <i class="fas fa-circle-info"></i>
+
+            Please check your information and try again.
+
+        </div>
+
+    </main>
+
+</body>
+</html>

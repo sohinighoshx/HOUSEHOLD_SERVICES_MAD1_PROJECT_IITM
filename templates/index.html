@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub · Household Services</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #eef2f5;
+        }
+
+        /* ===== BACKGROUND WITH SUBTLE BLUISH TINT ===== */
+        .hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                /* Very subtle bluish-gray overlay */
+                linear-gradient(135deg, rgba(30, 45, 60, 0.7) 0%, rgba(45, 65, 85, 0.65) 50%, rgba(55, 75, 95, 0.6) 100%),
+                /* Your image */
+                url('https://i.postimg.cc/j2ZW2nMH/Business-Event-Website-(4).png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Very subtle glow */
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(100, 150, 200, 0.08) 0%, transparent 70%);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: relative;
+            z-index: 1;
+            background: rgba(20, 35, 50, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0.8rem 2rem;
+            border-bottom: 1px solid rgba(150, 190, 220, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: #eef2f5;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .navbar-brand i {
+            color: #8ab4d6;
+            font-size: 1.4rem;
+        }
+
+        .navbar-brand span {
+            color: #8ab4d6;
+            font-weight: 300;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .navbar-nav .nav-link {
+            color: #b8ccdd;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffffff;
+            background: rgba(138, 180, 214, 0.12);
+            border-color: rgba(138, 180, 214, 0.2);
+        }
+
+        .navbar-nav .nav-link.active {
+            color: #8ab4d6;
+            background: rgba(138, 180, 214, 0.08);
+            border-color: rgba(138, 180, 214, 0.15);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        .hero-content {
+            max-width: 580px;
+            width: 100%;
+            text-align: center;
+            padding: 2.5rem 2.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .hero-icon {
+            font-size: 2.5rem;
+            color: #8ab4d6;
+            background: rgba(138, 180, 214, 0.12);
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+            border: 1px solid rgba(138, 180, 214, 0.15);
+        }
+
+        .hero-content .tag {
+            display: inline-block;
+            background: rgba(138, 180, 214, 0.12);
+            color: #8ab4d6;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(138, 180, 214, 0.1);
+        }
+
+        .hero-content h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #eef2f5;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .hero-content h1 .highlight {
+            color: #8ab4d6;
+        }
+
+        .hero-content p {
+            color: #b8ccdd;
+            font-size: 0.95rem;
+            margin: 0.6rem 0 1.5rem;
+            line-height: 1.7;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: 1.5px solid transparent;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #6a9fc9;
+            color: #ffffff;
+            border-color: #6a9fc9;
+        }
+
+        .btn-primary:hover {
+            background: #7db0d6;
+            border-color: #7db0d6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(106, 159, 201, 0.25);
+        }
+
+        .btn-primary i {
+            color: #ffffff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #eef2f5;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary i {
+            color: #8ab4d6;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0.15rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 1.2rem 2rem;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.7rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(20, 35, 50, 0.3);
+            backdrop-filter: blur(8px);
+        }
+
+        .footer i {
+            color: #8ab4d6;
+            margin: 0 4px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                padding: 0.6rem 1rem;
+            }
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+            .navbar-nav .nav-link {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.7rem;
+            }
+            .hero {
+                padding: 1rem;
+                min-height: calc(100vh - 120px);
+            }
+            .hero-content {
+                padding: 1.8rem 1.2rem;
+            }
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+            .btn {
+                font-size: 0.85rem;
+                padding: 0.65rem 1.2rem;
+            }
+            .hero-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero-content {
+                padding: 1.2rem 0.8rem;
+            }
+            .hero-content h1 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== BACKGROUND ===== -->
+    <div class="hero-bg"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-briefcase"></i>
+            Service<span>Hub</span>
+        </a>
+        <ul class="navbar-nav">
+            <li><a class="nav-link active" href="#">Home</a></li>
+            <li><a class="nav-link" href="{{ url_for('login') }}">Sign In</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="tag">Welcome to ServiceHub</div>
+
+            <div class="hero-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+
+            <h1>Your Home, <span class="highlight">Our Service</span></h1>
+            <p>
+                Connect with trusted professionals for all your household needs.
+                Join thousands of satisfied customers and service providers today.
+            </p>
+
+            <div class="btn-group">
+                <a class="btn btn-primary" href="{{ url_for('c_register') }}">
+                    <i class="fas fa-user-plus"></i> Sign up as a Customer
+                </a>
+
+                <div class="divider">or</div>
+
+                <a class="btn btn-secondary" href="{{ url_for('p_register') }}">
+                    <i class="fas fa-user-tie"></i> Sign up as a Professional
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+        <i class="fas fa-briefcase"></i> ServiceHub &copy; 2024 — Making household services simple
+    </div>
+
+</body>
+</html>

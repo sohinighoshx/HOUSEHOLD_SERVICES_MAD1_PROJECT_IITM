@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Service Requests</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- global reset & theme (matches other pages) ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f9;
+            color: #1e293b;
+            padding: 0 0 2rem 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ----- HEADER (shared) ----- */
+        header {
+            background: #0b2a4a;
+            color: white;
+            width: 100%;
+            padding: 1.2rem 2rem 1rem 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-bottom: 2px solid #ffd966;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-content h1 i {
+            color: #ffd966;
+            font-size: 1.8rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.6rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f0f7ff;
+            font-weight: 500;
+            padding: 0.45rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.06);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav a i {
+            font-size: 0.85rem;
+            color: #ffd966;
+        }
+
+        nav a:hover {
+            background: #ffd966;
+            color: #0b2a4a;
+            border-color: #ffd966;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 14px rgba(255, 215, 0, 0.2);
+        }
+        nav a:hover i {
+            color: #0b2a4a;
+        }
+
+        .logout-link {
+            background: rgba(255, 70, 70, 0.12) !important;
+            border-color: #b91c1c40 !important;
+        }
+        .logout-link:hover {
+            background: #b91c1c !important;
+            color: white !important;
+            border-color: #b91c1c !important;
+        }
+        .logout-link:hover i {
+            color: white !important;
+        }
+
+        /* ----- page title ----- */
+        .page-title {
+            max-width: 1300px;
+            width: 95%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .page-title h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #0b2a4a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-title h2 i {
+            color: #f59e0b;
+        }
+        .page-title .count-badge {
+            background: #eef2f6;
+            padding: 0.25rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        /* ----- requests grid ----- */
+        .requests-grid {
+            max-width: 1300px;
+            width: 95%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .request-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem 1.8rem 1.8rem 1.8rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ffffff60;
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .request-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 20, 40, 0.08);
+        }
+
+        .request-card .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+        }
+
+        .request-card .service-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #0b2a4a;
+            letter-spacing: -0.2px;
+        }
+
+        .request-card .status-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .status-pending {
+            background: #fef3c7;
+            color: #b76e00;
+        }
+        .status-accepted {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status-denied {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .status-default {
+            background: #eef2f6;
+            color: #64748b;
+        }
+
+        .request-card .details {
+            flex: 1;
+            margin: 0.6rem 0 1rem 0;
+        }
+
+        .request-card .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            color: #475569;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .request-card .detail-row:last-child {
+            border-bottom: none;
+        }
+        .request-card .detail-row i {
+            color: #f59e0b;
+            width: 1.2rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .request-card .detail-row strong {
+            color: #1e293b;
+            font-weight: 600;
+            min-width: 70px;
+        }
+
+        .request-card .action-row {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0.45rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .btn-accept {
+            background: #22c55e;
+            color: white;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+        }
+        .btn-accept:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-deny {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+        .btn-deny:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-view {
+            background: #eef2ff;
+            color: #4338ca;
+            border: 1px solid #c7d2fe;
+        }
+        .btn-view:hover {
+            background: #4338ca;
+            color: white;
+            border-color: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #94a3b8;
+            background: white;
+            border-radius: 24px;
+            font-size: 1.1rem;
+        }
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #d1d5db;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        /* inline forms */
+        .inline-form {
+            display: inline;
+            flex: 1;
+        }
+        .inline-form .btn-action {
+            width: 100%;
+        }
+
+        /* ----- footer ----- */
+        .footer-note {
+            max-width: 1300px;
+            width: 95%;
+            margin-top: 2rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* ----- responsive ----- */
+        @media (max-width: 700px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.7rem;
+                align-items: center;
+            }
+            .header-content h1 {
+                font-size: 1.6rem;
+            }
+            nav a {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.6rem;
+            }
+            .requests-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .request-card {
+                padding: 1.2rem;
+            }
+            .action-row {
+                flex-direction: column;
+            }
+            .inline-form {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .request-card .service-name {
+                font-size: 1rem;
+            }
+            .request-card .detail-row {
+                font-size: 0.8rem;
+            }
+            .btn-action {
+                font-size: 0.75rem;
+                padding: 0.35rem 0.8rem;
+            }
+        }
+
+        .text-muted {
+            color: #94a3b8;
+        }
+        .fw-semibold {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-clipboard-list"></i>
+                Service Requests
+            </h1>
+            <nav>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('lservices') }}"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="{{ url_for('list_of_professionals') }}"><i class="fas fa-user-tie"></i> Professionals</a>
+                <a href="{{ url_for('joining_requests') }}"><i class="fas fa-user-plus"></i> Joining</a>
+                <a href="{{ url_for('feedbacks') }}"><i class="fas fa-star"></i> Feedbacks</a>
+                <a href="{{ url_for('bookings') }}"><i class="fas fa-calendar-check"></i> Bookings</a>
+                <a href="{{ url_for('admin_summary') }}"><i class="fas fa-chart-pie"></i> Summary</a>
+                <a href="{{ url_for('logout') }}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== PAGE TITLE ========== -->
+    <div class="page-title">
+        <h2>
+            <i class="fas fa-inbox"></i> Pending Service Requests
+            <span class="count-badge">{{ requests|length }} pending</span>
+        </h2>
+        <span style="color:#64748b; font-size:0.9rem;">
+            <i class="fas fa-circle" style="color:#22c55e; font-size:0.6rem;"></i> Accept
+            <i class="fas fa-circle" style="color:#ef4444; font-size:0.6rem; margin-left:12px;"></i> Deny
+        </span>
+    </div>
+
+    <!-- ========== REQUESTS GRID ========== -->
+    <div class="requests-grid">
+        {% for request in requests %}
+        <div class="request-card">
+            <div class="card-top">
+                <span class="service-name">{{ request.name or 'Service Request' }}</span>
+                <span class="status-badge status-pending">
+                    <i class="fas fa-clock"></i> {{ request.status or 'Pending' }}
+                </span>
+            </div>
+
+            <div class="details">
+                <div class="detail-row">
+                    <i class="fas fa-align-left"></i>
+                    <strong>Description:</strong>
+                    <span>{{ request.description or '—' }}</span>
+                </div>
+                <div class="detail-row">
+                    <i class="fas fa-map-pin"></i>
+                    <strong>Pincode:</strong>
+                    <span>{{ request.pincode or '—' }}</span>
+                </div>
+                <div class="detail-row">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>Allowed:</strong>
+                    <span style="color:{% if request.allowed %}#166534{% else %}#b91c1c{% endif %};">
+                        {{ 'Yes' if request.allowed else 'No' }}
+                    </span>
+                </div>
+                <div class="detail-row">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Status:</strong>
+                    <span>{{ request.status or 'Pending' }}</span>
+                </div>
+            </div>
+
+            <div class="action-row">
+                <form class="inline-form" method="POST" action="{{ url_for('admin_review_request', request_id=request.id) }}">
+                    <button type="submit" name="action" value="accept" class="btn-action btn-accept">
+                        <i class="fas fa-check"></i> Accept
+                    </button>
+                </form>
+                <form class="inline-form" method="POST" action="{{ url_for('admin_review_request', request_id=request.id) }}">
+                    <button type="submit" name="action" value="deny" class="btn-action btn-deny">
+                        <i class="fas fa-times"></i> Deny
+                    </button>
+                </form>
+                <a href="#" class="btn-action btn-view" title="View details">
+                    <i class="fas fa-ellipsis-h"></i>
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            No pending service requests.
+            <span style="display:block; font-size:0.9rem; margin-top:4px; color:#94a3b8;">
+                All caught up!
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <div class="footer-note">
+        <span><i class="far fa-calendar-alt"></i> &copy; 2024 Household Services</span>
+        <span>
+            <i class="fas fa-file-signature"></i> {{ requests|length }} request(s) awaiting review
+        </span>
+    </div>
+
+</body>
+</html>

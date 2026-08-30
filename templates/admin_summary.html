@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Summary · Dashboard</title>
+    <!-- Chart.js v3 (lightweight & fast) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <!-- Font Awesome for icons (optional but adds polish) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f4f9;
+            color: #1e293b;
+            padding: 0 0 2rem 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ---------- HEADER / NAVBAR ---------- */
+        header {
+            background: #0b2a4a; /* deep navy */
+            color: white;
+            width: 100%;
+            padding: 1.2rem 2rem 1rem 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border-bottom: 2px solid #ffd966;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        h1 i {
+            color: #ffd966;
+            font-size: 2rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.8rem;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f0f7ff;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.06);
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav a i {
+            font-size: 0.9rem;
+            color: #ffd966;
+        }
+
+        nav a:hover {
+            background: #ffd966;
+            color: #0b2a4a;
+            border-color: #ffd966;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 14px rgba(255, 215, 0, 0.25);
+        }
+        nav a:hover i {
+            color: #0b2a4a;
+        }
+
+        /* ---------- CARDS / CHARTS ---------- */
+        .dashboard-grid {
+            max-width: 1300px;
+            width: 95%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.8rem 1.8rem 2rem 1.8rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+            border: 1px solid #ffffff50;
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 20, 40, 0.10);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #eef2f6;
+            padding-bottom: 0.7rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0b2a4a;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header h2 i {
+            color: #ffb347;
+            font-size: 1.6rem;
+        }
+
+        .badge {
+            background: #eef2f6;
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 280px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* responsive canvas */
+        .chart-wrapper canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 280px;
+        }
+
+        /* small footer / extra stats */
+        .stat-note {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: right;
+            border-top: 1px solid #e9edf2;
+            padding-top: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .stat-note span i {
+            margin-right: 6px;
+            color: #3b82f6;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.8rem;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 0.8rem;
+                align-items: center;
+            }
+            nav {
+                justify-content: center;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            nav a {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.7rem;
+            }
+            .chart-card {
+                padding: 1rem;
+            }
+            .card-header h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* quick little pulse on numbers */
+        .highlight-num {
+            font-weight: 700;
+            color: #0b2a4a;
+        }
+
+        /* logout special */
+        .logout-link {
+            background: rgba(255, 70, 70, 0.12) !important;
+            border-color: #b91c1c40 !important;
+        }
+        .logout-link:hover {
+            background: #b91c1c !important;
+            color: white !important;
+            border-color: #b91c1c !important;
+        }
+        .logout-link:hover i {
+            color: white !important;
+        }
+
+        /* container for summary */
+        .summary-foot {
+            max-width: 1300px;
+            width: 95%;
+            margin-top: 1.5rem;
+            color: #475569;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            background: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .summary-foot i {
+            color: #3b82f6;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-chart-pie"></i> 
+                Summary
+            </h1>
+            <nav>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('lservices') }}"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="{{ url_for('list_of_professionals') }}"><i class="fas fa-user-tie"></i> Professionals</a>
+                <a href="{{ url_for('admin_service_requests') }}"><i class="fas fa-clipboard-list"></i> Requests</a>
+                <a href="{{ url_for('joining_requests') }}"><i class="fas fa-user-plus"></i> Joining</a>
+                <a href="{{ url_for('feedbacks') }}"><i class="fas fa-star"></i> Feedbacks</a>
+                <a href="{{ url_for('bookings') }}"><i class="fas fa-calendar-check"></i> Bookings</a>
+                <a href="{{ url_for('logout') }}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== DASHBOARD GRID ========== -->
+    <div class="dashboard-grid">
+
+        <!-- ---- USER STATS CARD ---- -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h2><i class="fas fa-users"></i> User Statistics</h2>
+                <span class="badge"><i class="far fa-calendar-alt"></i> live</span>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="userChart"></canvas>
+            </div>
+            <div class="stat-note">
+                <span><i class="fas fa-user-check"></i> Total users: <strong class="highlight-num">{{ total_users }}</strong></span>
+                <span><i class="fas fa-user-friends"></i> Customers: {{ total_customers }} · Prof: {{ total_professionals }}</span>
+            </div>
+        </div>
+
+        <!-- ---- ORDER STATS CARD ---- -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h2><i class="fas fa-shopping-bag"></i> Order Statistics</h2>
+                <span class="badge"><i class="fas fa-rotate-right"></i> updated</span>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="orderChart"></canvas>
+            </div>
+            <div class="stat-note">
+                <span><i class="fas fa-receipt"></i> Total: <strong class="highlight-num">{{ total_orders }}</strong></span>
+                <span><i class="fas fa-check-circle" style="color:#2e7d32;"></i> {{ completed_orders }} · <i class="fas fa-times-circle" style="color:#b71c1c;"></i> {{ rejected_orders }} · <i class="fas fa-clock" style="color:#b76e00;"></i> {{ pending_orders }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- small extra summary line (optional) -->
+    <div class="summary-foot">
+        <span><i class="fas fa-chart-simple"></i> Summary at a glance</span>
+        <span><i class="fas fa-flag-checkered"></i> Completed orders: {{ completed_orders }}</span>
+        <span><i class="fas fa-hourglass-half"></i> Pending: {{ pending_orders }}</span>
+    </div>
+
+    <!-- ========== CHARTS SCRIPT ========== -->
+    <script>
+        (function() {
+            // --- Helper: convert Flask variables to numbers (safe) ---
+            const getNum = (val) => {
+                const parsed = parseFloat(String(val).replace(/,/g, '').trim());
+                return isNaN(parsed) ? 0 : parsed;
+            };
+
+            // user data
+            const totalUsers = getNum('{{ total_users }}');
+            const totalCustomers = getNum('{{ total_customers }}');
+            const totalProfessionals = getNum('{{ total_professionals }}');
+
+            // order data
+            const totalOrders = getNum('{{ total_orders }}');
+            const completedOrders = getNum('{{ completed_orders }}');
+            const rejectedOrders = getNum('{{ rejected_orders }}');
+            const pendingOrders = getNum('{{ pending_orders }}');
+
+            // ---- USER CHART (Bar) ----
+            const userCtx = document.getElementById('userChart').getContext('2d');
+            new Chart(userCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Total Users', 'Customers', 'Professionals'],
+                    datasets: [{
+                        label: 'Count',
+                        data: [totalUsers, totalCustomers, totalProfessionals],
+                        backgroundColor: ['#2563eb', '#0d9488', '#dc2626'],
+                        borderRadius: 8,
+                        barPercentage: 0.65,
+                        categoryPercentage: 0.8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' users';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { weight: '500', size: 12 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#e9edf2' },
+                            ticks: { stepSize: Math.max(1, Math.ceil(totalUsers / 6)) }
+                        }
+                    }
+                }
+            });
+
+            // ---- ORDER CHART (Pie) ----
+            const orderCtx = document.getElementById('orderChart').getContext('2d');
+            new Chart(orderCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Total Orders', 'Completed', 'Rejected', 'Pending'],
+                    datasets: [{
+                        data: [totalOrders, completedOrders, rejectedOrders, pendingOrders],
+                        backgroundColor: ['#facc15', '#3b82f6', '#ef4444', '#14b8a6'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 14,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                font: { size: 12, weight: '500' }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    let value = context.parsed || 0;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                    return label + ': ' + value + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        })();
+    </script>
+
+    <!-- (optional) ensure that chart containers have proper height on small screens -->
+    <style>
+        /* fine-tune canvas inside wrapper */
+        .chart-wrapper {
+            height: 260px;
+        }
+        @media (max-width: 600px) {
+            .chart-wrapper {
+                height: 220px;
+            }
+        }
+        .summary-foot {
+            background: #ffffffd0;
+            backdrop-filter: blur(4px);
+        }
+        /* card header icon color */
+        .card-header h2 i {
+            color: #f59e0b;
+        }
+        .badge i {
+            margin-right: 4px;
+            color: #3b82f6;
+        }
+        .logout-link i {
+            color: #f87171;
+        }
+        .logout-link:hover i {
+            color: white !important;
+        }
+    </style>
+</body>
+</html>
